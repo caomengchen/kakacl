@@ -1,0 +1,101 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet"
+      href="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/dist/css/bootstrap-select.min.css">
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="jobForm">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <div class="hr-line-dashed"></div>
+                    <div class="input-group col-sm-12" underline="true">
+                        <label class="col-sm-3 control-label">企业</label>
+                        <select data-live-search="true"  id="companyId" onchange="companyselectchenge(this)" class="selectpicker col-sm-9">
+                        </select>
+                    </div>
+
+                    <#SelectCon id="positionId" name="职位">
+                        <option value="3">请选择</option>
+                    </#SelectCon>
+                   <#SelectCon id="employeeCycle" name="发薪模式 ">
+                    <option value="50701">月薪</option>
+                    <option value="50702">小时工</option>
+                   </#SelectCon>
+                   <#input id="numberPeople" name="招聘人数" value="50" underline="true"/>
+                   <!--<SelectCon id="billingCycle" name="补贴方式">
+                    <option value="50105">定期返</option>
+                    <option value="50107">差价</option>
+                   <electCon>-->
+                    <div class="hr-line-dashed"></div>
+                    <div class="input-group col-sm-12" underline="true">
+                        <label class="col-sm-3 control-label">补贴方式</label>
+                        <select data-live-search="true"  id="billingCycle" class="selectpicker col-sm-9">
+                        </select>
+                    </div>
+                   <#input id="allowancePrice" name="补贴价格(元)" value="800" underline="true"/>
+                   <#input id="allowanceCycle" name="补贴周期" value="21" underline="true"/>
+                   <#SelectCon id="unit" name="考勤方式">
+                        <option selected="selected" value="50601">考勤日</option>
+                        <option value="50602">工时</option>
+                        <option value="50603">工作日</option>
+                        <option value="50604">自然日</option>
+                   </#SelectCon>
+
+                   <#input id="endTime" name="截止时间" value="" underline="true"/>
+                </div>
+
+               <#input id="condition" type="hidden" name="" value="空" underline="true"/>
+               <#input id="welfare" name="" type="hidden" value="空" underline="true"/>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="JobInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JobInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/job/job_info.js"></script>
+<script src="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/bootstrap-select.js"></script>
+<script src="${ctxPath}/static/js/plugins/layer/laydate/laydate.js"></script>
+<script>
+	$.get("${ctxPath}" + "/company/findCompanyList" , function(data,status){
+	    for(var i = 0 ; i < data.length; i ++) {
+	    	$("#companyId").append("<option value='"+ data[i].id +"'>" + data[i].name +"</option>");
+	    }
+        $(".selectpicker").selectpicker("refresh");
+	});
+
+	function companyselectchenge(paramobj) {
+        $("#positionId").empty();
+        var obj = document.getElementById('companyId');
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+        $.get("${ctxPath}" + "/company/findPositionList/" + value , function(data,status){
+            for(var i = 0 ; i < data.length; i ++) {
+                $("#positionId").append("<option value='"+ data[i].id +"'>" +  data[i].name +"</option>");
+            }
+            $(".selectpicker").selectpicker("refresh");
+        });
+    }
+
+    $.get("${ctxPath}" + "/tools/subsidyStatus" , function(data,status){
+        console.info(data);
+        data = data.responseContent.data;
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#billingCycle").append("<option value='"+ data[i].key +"'>" + data[i].value +"</option>");
+        }
+        $(".selectpicker").selectpicker("refresh");
+    });
+
+    laydate.render({
+        elem: '#endTime',
+        festival: true,
+        istoday: true,
+        type: 'datetime',
+        istoday: true
+    });
+</script>
+@}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.AccountBankMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.AccountBank">
+        <id column="id" property="id" />
+        <result column="account_id" property="accountId" />
+        <result column="name" property="name" />
+        <result column="bank_card" property="bankCard" />
+        <result column="bank_name" property="bankName" />
+        <result column="bank_code" property="bankCode" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, account_id, name, bank_card, bank_name, bank_code, is_deleted, create_time, update_time
+    </sql>
+
+    <select id="getAccountBank" parameterType="java.util.Map" resultType="cn.stylefeng.guns.modular.store.model.AccountBank">
+        select * from  store_account_bank where 1=1
+        <if test="id != null and id != ''">
+              and  id = #{id}
+        </if>
+        <if test="accountId != null and accountId != ''">
+             and  account_id = #{accountId}
+        </if>
+    </select>
+
+    <update id="updateAccountBank" parameterType="java.util.Map">
+      update store_account_bank
+        <set>
+            <if test="bankname != null and bankname != ''">
+                bank_name=#{bankname},
+            </if>
+            <if test="bankcard != null and bankcard != ''">
+                bank_card=#{bankcard},
+            </if>
+        </set>
+        where account_id=#{accountId}
+    </update>
+
+</mapper>

@@ -1,0 +1,43 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet"
+      href="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/dist/css/bootstrap-select.min.css">
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <#input id="id" type="hidden" name="" value="${item.id}" underline="true"/>
+                    <#input id="billCycle" name="结算周期" value="${item.billCycle}" underline="true"/>
+                    <div class="col-sm-12">
+                        <div class="input-group col-sm-12" underline="true">
+                            <label class="col-sm-3 control-label">考勤类型</label>
+                            <select data-live-search="true" id="billingCycle" class="selectpicker col-sm-9">
+                            </select>
+                        </div>
+                    </div>
+                    <#input id="billPrice" name="结算价格" value="${item.billPrice}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SettlementInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SettlementInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/settlement/settlement_info.js"></script>
+<script src="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/bootstrap-select.js"></script>
+<script>
+    $.get("${ctxPath}" + "/tools/units" , function(data,status){
+        data = data.responseContent.data;
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#billingCycle").append("<option value='"+ data[i].key +"'>"+ data[i].value +"</option>");
+        }
+        $(".selectpicker").selectpicker("refresh");
+    });
+</script>
+@}

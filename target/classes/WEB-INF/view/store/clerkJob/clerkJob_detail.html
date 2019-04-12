@@ -1,0 +1,47 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>店员职位详情</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                    	<#input id="companyName" disabled="true" name="企业名称" value="${company.companyName}"/>
+                        <#input id="id" disabled="true" style="visibility:hidden" name="" value="${item.id}" underline="true"/>
+                        <#input id="allowancePrice" disabled="true" name="补贴价格(元)" value="${clerkJob.billPrice}" underline="true"/>
+                        <#input id="allowanceCycle" disabled="true" name="补贴周期" value="${clerkJob.billCycle} ${clerkJob.billingCycleView}" underline="true"/>
+                        <div class="col-sm-12 full-right">
+                            <#button name="在线报名" icon="fa-pencil" clickFun="ClerkJobInfoDlg.registration(${clerkJob.id})" space="true" />
+                        </div>
+                        <div class="col-sm-12">
+                            <h1>职位介绍</h1>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="alert alert-success alert-dismissable">
+                                ${position.info}
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <h1>福利待遇</h1>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="alert alert-success alert-dismissable">
+                                ${position.welfare}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <img class="col-sm-12" style="max-height: 800px" src="${position.positionImg}" onerror="javascript:this.src='${ctxPath}/static/img/404.png'" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/clerkJob/clerkJob_detail.js"></script>
+@}

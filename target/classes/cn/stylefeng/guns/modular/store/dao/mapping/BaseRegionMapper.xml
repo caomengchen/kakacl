@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.BaseRegionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.BaseRegion">
+        <result column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="type" property="type" />
+        <result column="name" property="name" />
+        <result column="alias" property="alias" />
+        <result column="zip" property="zip" />
+        <result column="source" property="source" />
+        <result column="created" property="created" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, type, name, alias, zip, source, created
+    </sql>
+
+</mapper>

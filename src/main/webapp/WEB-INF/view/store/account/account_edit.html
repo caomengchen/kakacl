@@ -1,0 +1,47 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="id" value="${item.id}" underline="true"/>
+                            <#input id="role" name="角色 0=普通用户，1=经纪人" value="${item.role}" underline="true"/>
+                            <#input id="avatar" name="" value="${item.avatar}" underline="true"/>
+                            <#input id="nickname" name="昵称" value="${item.nickname}" underline="true"/>
+                            <#input id="sex" name="性别" value="${item.sex}" underline="true"/>
+                            <#input id="age" name="年龄" value="${item.age}" underline="true"/>
+                            <#input id="phone" name="手机号码" value="${item.phone}" underline="true"/>
+                            <#input id="jobNum" name="工号" value="${item.jobNum}" underline="true"/>
+                            <#input id="email" name="电子邮件" value="${item.email}" underline="true"/>
+                            <#input id="province" name="省" value="${item.province}" underline="true"/>
+                            <#input id="city" name="城市" value="${item.city}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="area" name="区域" value="${item.area}" underline="true"/>
+                            <#input id="address" name="地址" value="${item.address}" underline="true"/>
+                            <#input id="password" name="密码" value="${item.password}" underline="true"/>
+                            <#input id="status" name="账号状态 0=正常，1=冻结" value="${item.status}" underline="true"/>
+                            <#input id="workStatus" name="求职状态（0=暂不考虑，1=找工作，2=想换工作，3=已在职）" value="${item.workStatus}" underline="true"/>
+                            <#input id="companyId" name="工作的企业（停用，使用企业用户表）" value="${item.companyId}" underline="true"/>
+                            <#input id="positionId" name="职位id" value="${item.positionId}" underline="true"/>
+                            <#input id="points" name="积分" value="${item.points}" underline="true"/>
+                            <#input id="serviceId" name="客服id" value="${item.serviceId}" underline="true"/>
+                            <#input id="createTime" name="" value="${item.createTime}" underline="true"/>
+                            <#input id="updateTime" name="更新状态" value="${item.updateTime}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AccountInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AccountInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/account/account_info.js"></script>
+@}

@@ -1,0 +1,36 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <!-- <#input id="id" name="主键id" underline="true"/> -->
+                            <#input id="storeId" name="门店主键-店长主键" underline="true"/>
+                            <#input id="jobId" name="职位主键" underline="true"/>
+                            <#input id="billingCycle" name="结算方式" underline="true"/>
+                            <#input id="billPrice" name="结算价格(元)" underline="true"/>
+                            <#input id="billCycle" name="结算周期"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="delFlag" name="删除标记" underline="true"/>
+                            <#input id="createTime" name="创建时间" underline="true"/>
+                            <#input id="createBy" name="创建者" underline="true"/>
+                            <#input id="updateTime" name="更新时间" underline="true"/>
+                            <#input id="updateBy" name="更新者" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ClerkJobInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ClerkJobInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/clerkJob/clerkJob_info.js"></script>
+@}

@@ -1,0 +1,71 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+            <input type="hidden" id="title" value="${workCheck.title}">
+            <input type="hidden" id="extType" value="${workCheck.extType}">
+            <input type="hidden" id="disabled" value="${workCheck.disabled}">
+
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input  id="cid" name="公司编号" value="${workCheck.cid}" underline="true"/>
+                    <#input readonly="readonly" id="id" name="编号" value="${workCheck.id}" underline="true"/>
+                    <#input readonly="readonly" id="name" name="别名" value="${workCheck.name}" underline="true"/>
+                    <#input readonly="readonly" id="pid" name="岗位编号" value="${workCheck.pid}" underline="true"/>
+                    <#input readonly="readonly" id="companyName" name="公司名称" value="${companyName}" underline="true"/>
+                    <#input readonly="readonly" id="workname" name="岗位名称" value="${workname}" underline="true"/>
+                    <#input  id="fSTime" name="首次上班时间" value="${workCheck.fSTime}" underline="true"/>
+                    <#input  id="fETime" name="首次下班时间" value="${workCheck.fETime}" underline="true"/>
+                    <#input  id="sSTime" name="二次上班时间" value="${workCheck.sSTime}" underline="true"/>
+                    <#input  id="sETime" name="二次下班时间" value="${workCheck.sETime}" underline="true"/>
+                    <#input  id="ebegin" name="加班开始时间" value="${workCheck.ebegin}" underline="true"/>
+                    <#input  id="eend" name="加班结束时间" value="${workCheck.eend}" underline="true"/>
+                    <#input  id="updateTime" name="修改时间" value="${workCheck.updateTime}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="修改" id="ensure" icon="fa-check" clickFun="WorkCheckInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="WorkCheckInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/workCheck/workCheck_info.js"></script>
+<script src="${ctxPath}/static/js/plugins/layer/laydate/laydate.js"></script>
+<script type="application/javascript">
+    laydate.render({
+        elem: '#updateTime'
+        ,type: 'datetime'
+    });
+
+    laydate.render({
+        elem: '#fSTime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#fETime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#sSTime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#sETime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#ebegin',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#eend',
+        type:"time"
+    });
+</script>
+@}

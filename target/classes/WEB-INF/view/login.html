@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>咔咔创联门店系统 - 登录</title>
+
+    <link rel="shortcut icon" href="${ctxPath}/static/favicon.ico">
+    <link href="${ctxPath}/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="${ctxPath}/static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="${ctxPath}/static/css/style.css?v=4.1.0" rel="stylesheet">
+    <script>if (window.top !== window.self) {
+        window.top.location = window.location;
+    }</script>
+    <script src="${ctxPath}/static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="${ctxPath}/static/js/bootstrap.min.js?v=3.3.6"></script>
+</head>
+
+<body class="gray-bg">
+<div class="middle-box text-center loginscreen">
+    <div style="padding: 100px 0px;">
+        <div>
+            <!--<h1 class="logo-name">SZ</h1>-->
+            <img src="${ctxPath}/static/img/logo.png" width="400px" height="400px" />
+        </div>
+        <h3>咔咔创联 门店系统 当前版本：1.2.5</h3>
+        <br/>
+        <h4 style="color: red;">${tips!}</h4>
+        <form class="m-t" role="form" action="${ctxPath}/" method="post">
+            <div class="form-group">
+              <!--<input type="text" name="username" class="form-control" value="" placeholder="用户名" required="">-->
+                <select name="username">
+                    <option value="wangjunsheng">王俊生</option>
+                    <option value="yangjialin">杨佳琳</option>
+                    <option value="sdm_s_001">sdm_s_001</option>
+                    <option value="admin">admin</option>
+                    <option value="dianzhang">店长</option>
+                    <option value="dianyuan">店员</option>
+                    <option value="luruyuan">录入员</option>
+                    <option value="kaka10dianzhang">自有门店店长</option>
+                    <option value="kaka10dianyuan">自有门店店员</option>
+                    <option value="gonggao">公告</option>
+                    <option value="zhaopinchakan">zhaopinchakan</option>
+                    <option value="test">test</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" value="111111" placeholder="密码" required="">
+            </div>
+            @if(kaptcha.getKaptchaOnOff() == true){
+            <div class="form-group" style="float: left;">
+                <div class="col-sm-8" style="padding-left: 0px; padding-right: 0px;">
+                    <input class="form-control" type="text" name="kaptcha" placeholder="验证码" required="">
+                </div>
+                <div class="col-sm-4" style="padding-left: 0px; padding-right: 0px;">
+                    <img src="${ctxPath}/kaptcha" id="kaptcha" width="100%" height="100%"/>
+                </div>
+            </div>
+            @}
+            <div class="form-group" style="float: left;">
+                <div class="checkbox" style="text-align: left">
+                    <label>
+                        <!--<input type="checkbox" name="remember" style="margin-top: 2px;">记住我-->
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
+            </p>
+        </form>
+    </div>
+</div>
+
+<nav class="navbar navbar-fixed-bottom">
+    <div class="footer">
+        <div class="pull-right">&copy; 2012-2019 <a href="#" target="_blank">苏州咔咔创联网络科技有限公司</a>
+        </div>
+    </div>
+</nav>
+</body>
+<script>
+    $(function () {
+        $("#kaptcha").on('click', function () {
+            $("#kaptcha").attr('src', '${ctxPath}/kaptcha?' + Math.floor(Math.random() * 100)).fadeIn();
+        });
+    });
+</script>
+</html>

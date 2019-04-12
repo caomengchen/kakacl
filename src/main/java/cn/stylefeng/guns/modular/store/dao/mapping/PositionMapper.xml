@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.PositionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.Position">
+        <id column="id" property="id" />
+        <result column="company_id" property="companyId" />
+        <result column="industry_id" property="industryId" />
+        <result column="station_id" property="stationId" />
+        <result column="type_id" property="typeId" />
+        <result column="name" property="name" />
+        <result column="info" property="info" />
+        <result column="welfare" property="welfare" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="position_img" property="positionImg" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="company_name" property="companyName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, company_id, industry_id, station_id, type_id, name, info, welfare, is_deleted, position_img, create_time, update_time
+    </sql>
+
+    <select id="selectListEntity" resultType="cn.stylefeng.guns.modular.store.model.Position" parameterType="java.util.Map">
+        SELECT
+            store_position.id AS id,
+            store_position.company_id AS companyId,
+            store_position.industry_id AS industryId,
+            store_position.station_id AS stationId,
+            store_position.type_id AS typeId,
+            store_position.`name`,
+            store_position.info,
+            store_position.welfare,
+            store_position.is_deleted AS isDeleted,
+            store_position.position_img AS positionImg,
+            store_position.create_time AS createTime,
+            store_position.update_time AS updateTime,
+            store_company.company_name AS companyName
+        FROM
+            store_position
+        LEFT JOIN
+            store_company
+        ON
+            store_position.company_id = store_company.id
+        where 1 = 1 AND store_position.is_deleted = 0
+        <if test="companyName != null and companyName != ''">
+            and store_company.company_name LIKE CONCAT('%', #{companyName}, '%')
+        </if>
+        <if test="positionName != null and positionName != ''">
+            and store_position.name LIKE CONCAT('%', #{positionName}, '%')
+        </if>
+        <if test="companyName != null and companyName != ''">
+            and store_company.company_name LIKE CONCAT('%', #{companyName}, '%')
+        </if>
+
+    </select>
+
+    <update id="updateDeleteFlag" parameterType="java.util.Map">
+        UPDATE store_position
+        SET
+        is_deleted = #{isDeleted}
+        WHERE
+        id = #{id}
+    </update>
+
+</mapper>

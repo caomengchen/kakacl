@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.WorkCheckMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.WorkCheck">
+        <id column="id" property="id" />
+        <id column="name" property="name" />
+        <result column="cid" property="cid" />
+        <result column="pid" property="pid" />
+        <result column="title" property="title" />
+        <result column="extType" property="extType" />
+        <result column="disabled" property="disabled" />
+        <result column="first_STime" property="fSTime" />
+        <result column="first_ETime" property="fETime" />
+        <result column="second_STime" property="sSTime" />
+        <result column="second_ETime" property="sETime" />
+        <result column="ext_begin" property="ebegin" />
+        <result column="ext_end" property="eend" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+
+    <!--VO类-->
+    <resultMap id="BaseVOResultMap" type="cn.stylefeng.guns.modular.store.vo.WorkCheck">
+        <id column="id" property="id" />
+        <id column="name" property="name" />
+        <result column="cid" property="cid" />
+        <result column="pid" property="pid" />
+        <result column="title" property="title" />
+        <result column="extType" property="extType" />
+        <result column="disabled" property="disabled" />
+        <result column="first_STime" property="fSTime" />
+        <result column="first_ETime" property="fETime" />
+        <result column="second_STime" property="sSTime" />
+        <result column="second_ETime" property="sETime" />
+        <result column="ext_begin" property="ebegin" />
+        <result column="ext_end" property="eend" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="companyid" property="companyId" />
+        <result column="company_name" property="companyname" />
+        <result column="workname" property="workname" />
+
+
+
+    </resultMap>
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,name,cid, pid, title,extType, disabled, first_STime, first_ETime,second_STime,second_ETime,ext_begin,ext_end,create_time,update_time
+    </sql>
+
+
+    <select id="getList" resultMap="BaseVOResultMap" parameterType="java.util.Map">
+        select a.id,a.name,a.cid,a.pid,a.title,a.extType,a.disabled,a.first_STime,a.first_ETime,
+               a.second_STime,a.second_ETime,a.ext_begin,a.ext_end,a.create_time,a.update_time,
+               b.id as companyid,b.company_name,c.name as workname
+        from store_workCheck as a
+        JOIN store_company as b
+        on a.cid=b.id
+        JOIN store_position as c
+        on a.pid=c.id and c.company_id=b.id
+        WHERE a.disabled=0
+        and  a.cid in( SELECT companyid from stationedUser_company where userid=#{userid})
+        <if test="companyname != null and companyname != ''">
+            and  b.company_name LIKE CONCAT('%',#{companyname},'%')
+        </if>
+        <if test="workname != null and workname != ''">
+            and  c.name LIKE CONCAT('%',#{workname},'%')
+        </if>
+        <if test="fSTime != null and fSTime != ''">
+            and a.first_STime =#{fSTime}
+        </if>
+        <if test="fETime != null and fETime != ''">
+            and a.first_ETime =#{fETime}
+        </if>
+    </select>
+
+    <!--查询驻场人员可以选择的所有公司的岗位-->
+    <select id="getPositionList" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select
+            a.id ,
+            a.name
+            from
+            store_position as a
+            where
+             a.is_deleted = 0
+             and a.company_id = #{companyid}
+    </select>
+    <!--查询驻场人员可以选择的所有公司-->
+    <select id="getCompanyList" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select
+            a.id ,
+            a.company_name
+            from
+            store_company as a
+            where a.id in (SELECT companyid from stationedUser_company where userid=#{userid})
+    </select>
+  <insert id="insertWorkCheck" parameterType="cn.stylefeng.guns.modular.store.model.WorkCheck">
+      insert into store_workCheck(
+       name,
+       cid,
+       pid,
+       title,
+       extType,
+       disabled,
+       first_STime,
+       first_ETime,
+       second_STime,
+       second_ETime,
+       ext_begin,
+       ext_end,
+       create_time,
+       update_time
+      )values (
+      #{name},
+      #{cid},
+      #{pid},
+      #{title},
+      #{extType},
+      0,
+      #{fSTime},
+      #{fETime},
+      #{sSTime},
+      #{sETime},
+      #{ebegin},
+      #{eend},
+      #{createTime},
+      #{updateTime}
+      )
+  </insert>
+
+
+    <!--逻辑删除-->
+    <update id="updateWorkCheckById" parameterType="java.lang.Integer">
+        update  store_workCheck
+        set disabled=1
+        where id=#{id}
+    </update>
+
+</mapper>

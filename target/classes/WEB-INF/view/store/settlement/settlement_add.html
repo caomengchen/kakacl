@@ -1,0 +1,36 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" underline="true"/>
+                            <#input id="type" name="补贴类型：1就业补贴" underline="true"/>
+                            <#input id="no" name="补贴编号" underline="true"/>
+                            <#input id="sysUserId" name="店员主键" underline="true"/>
+                            <#input id="storeAccountId" name="雇员主键" underline="true"/>
+                            <#input id="billingCycle" name="结算方式"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="billPrice" name="结算价格" underline="true"/>
+                            <#input id="billCycle" name="结算周期" underline="true"/>
+                            <#input id="createTime" name="" underline="true"/>
+                            <#input id="remakes" name="" underline="true"/>
+                            <#input id="delFlag" name="删除标记：0，未删除；1，删除" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SettlementInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SettlementInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/settlement/settlement_info.js"></script>
+@}

@@ -1,0 +1,37 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" value="${item.id}" underline="true"/>
+                            <#input id="companyId" name="企业id" value="${item.companyId}" underline="true"/>
+                            <#input id="industryId" name="行业id" value="${item.industryId}" underline="true"/>
+                            <#input id="stationId" name="所属岗位id" value="${item.stationId}" underline="true"/>
+                            <#input id="typeId" name="工种" value="${item.typeId}" underline="true"/>
+                            <#input id="name" name="职位名称" value="${item.name}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="info" name="职位描述" value="${item.info}" underline="true"/>
+                            <#input id="welfare" name="福利" value="${item.welfare}" underline="true"/>
+                            <#input id="isDeleted" name="" value="${item.isDeleted}" underline="true"/>
+                            <#input id="positionImg" name="职位图片地址" value="${item.positionImg}" underline="true"/>
+                            <#input id="createTime" name="" value="${item.createTime}" underline="true"/>
+                            <#input id="updateTime" name="更新时间" value="${item.updateTime}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="PositionInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="PositionInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/position/position_info.js"></script>
+@}

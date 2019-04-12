@@ -1,0 +1,97 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="accountInfoForm">
+        	<div class="row">
+        	</div>
+
+            <div class="row">
+            	<!-- <div class="col-sm-6 b-r">
+                	<#input id="positionId" disabled="true" name="职位类型" value="${item.positionId}" underline="true"/>
+                	<#input id="companyId" disabled="true" name="招聘公司" value="${item.companyId}" underline="true"/>
+                </div> -->
+                <div class="col-sm-12 b-r">
+                	<input type="hidden" id="jobId" type="hidden" disabled="true" name="职位编号" value="${item.id}" underline="true"/>
+                    <#input id="name" value="" name="姓名" underline="true"/>
+                    <!--<SelectCon id="gender" name="性别" class="col-sm-3">
+                        <option class="col-sm-9" selected="selected" value="0">男</option>
+                        <option value="1">女</option>
+                    </SelectCon>-->
+                    <div class="input-group col-sm-12" underline="true">
+                        <label class="col-sm-3 control-label">性别</label>
+                        <select id="gender" class="single-line col-sm-9" style="width: auto">
+                            <option selected="selected" value="0">男</option>
+                            <option value="1">女</option>
+                        </select>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="input-group col-sm-12" underline="true">
+                        <label class="col-sm-3 control-label">籍贯</label>
+                        <select id="birthplace" onChcnge="changeBirthplace(this)" class="single-line col-sm-9" style="width: auto">
+                        </select>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="input-group col-sm-12" underline="true">
+                        <label class="col-sm-3 control-label">民族</label>
+                        <select id="nationality" class="single-line col-sm-9" style="width: auto">
+                        </select>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="idCard" value="" name="身份证号码" underline="true"/>
+                    <#input id="address" value="" name="户籍所在地" underline="true"/>
+                    <!--<div class="alert alert-success col-sm-12">
+                        <strong class="col-sm-3" style="text-align: right">提醒!</strong>
+                        我们支持的银行有 中国工商银行、中国农业银行、中国银行、中国建设银行、交通银行。
+                    </div>-->
+                    <#input id="backNum" type="hidden" value="" name="" underline="true"/><!--银行卡号-->
+                    <#input id="phone" value="" name="手机号码" underline="true"/>
+
+                    @if(clerkJob.clerkIsReset == 0){
+                        <#input id="billPrice" disabled="true" name="结算价格(元)" value="${clerkJob.billPrice}" underline="true"/>
+                        <#input id="billCycle" disabled="true" name="结算周期" value="${clerkJob.billCycle}" underline="true"/>
+                        <#input id="billingCycle" type="hidden" name="" value="${jd.unit}"/>
+                        <#input id="billingCycleView" disabled="true" name="考勤方式" value="${jd.unitView}" underline="true"/>
+                    @}
+                    @if(clerkJob.clerkIsReset == 1){
+                        <#input id="billCycle" name="结算周期" value="" underline="true"/>
+                        <div class="input-group col-sm-12" underline="true">
+                            <label class="col-sm-3 control-label">考勤方式</label>
+                            <select id="billingCycle" class="single-line col-sm-9" style="width: auto">
+                                <option selected="selected" value="50601">考勤日</option>
+                                <option value="50602">工时</option>
+                                <option value="50603">工作日</option>
+                                <option value="50604">自然日</option>
+                            </select>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <#input id="billPrice" name="结算价格(元)" value="" underline="true"/>
+                    @}
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="在线报名" id="ensure" icon="fa-check" clickFun="AccountInfoDlg.addSubmit()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/clerkJob/clerkJob_registration.js"></script>
+<script>
+	$.get("${ctxPath}/tools/nations" , function(data,status){
+	    data = data.responseContent.data;
+		for(var i = 0 ; i < data.length; i ++) {
+	    	$("#nationality").append("<option value='"+ data[i] +"'>"+ data[i] +"</option>");
+	    }
+	});
+	
+	$.get("${ctxPath}/tools/findBaseRegion" , function(data,status){
+	    data = data.responseContent.data;
+		for(var i = 0 ; i < data.length; i ++) {
+	    	$("#birthplace").append("<option value='"+ data[i].id +"'>"+ data[i].name +"</option>");
+	    }
+	});
+</script>
+
+@}

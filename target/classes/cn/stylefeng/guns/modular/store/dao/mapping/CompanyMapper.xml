@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.CompanyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.Company">
+        <id column="id" property="id" />
+        <result column="company_name" property="companyName" />
+        <result column="industry_id" property="industryId" />
+        <result column="company_type" property="companyType" />
+        <result column="count_base" property="countBase" />
+        <result column="count_top" property="countTop" />
+        <result column="contact_name" property="contactName" />
+        <result column="contact_phone" property="contactPhone" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="area" property="area" />
+        <result column="address" property="address" />
+        <result column="image" property="image" />
+        <result column="info" property="info" />
+        <result column="sort" property="sort" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, company_name, industry_id, company_type, count_base, count_top, contact_name, contact_phone, province, city, area, address, image, info, sort, is_deleted, create_time, update_time
+    </sql>
+
+    <insert id="insertCompany" parameterType="map">
+        INSERT INTO `store_company` (
+            `company_name`,
+            `industry_id`,
+            `company_type`,
+            `count_base`,
+            `count_top`,
+            `contact_name`,
+            `contact_phone`,
+            `province`,
+            `city`,
+            `area`,
+            `address`,
+            `image`,
+            `info`,
+            `sort`,
+            `is_deleted`,
+            `create_time`,
+            `update_time`
+            )
+            VALUES
+            (
+            #{companyName},
+            '38',
+            '企业',
+            '500',
+            '1000',
+            '匿名用户',
+            '13800138000',
+            '320000000000',
+            '320500000000',
+            #{area},
+            '',
+            #{companyImg},
+            '',
+            NULL,
+            '1',
+            NOW(),
+            NULL
+        )
+    </insert>
+
+    <!--公司介绍-->
+    <select id="selectListEntity" resultType="cn.stylefeng.guns.modular.store.model.Company" parameterType="java.util.Map">
+        SELECT
+            store_company.id AS id,
+            store_company_introduction.id AS introductionId,
+            store_company.company_name AS companyName,
+            store_company.industry_id AS industryId,
+            store_company.company_type AS companyType,
+            store_company.count_base AS countBase,
+            store_company.count_top AS countTop,
+            store_company.contact_name AS contactName,
+            store_company.contact_phone AS contactPhone,
+            store_company.province,
+            store_company.city,
+            store_company.area,
+            store_company.address,
+            store_company.image,
+            store_company.info,
+            store_company.sort,
+            store_company.is_deleted AS isDeleted,
+            store_company.create_time AS createTime,
+            store_company.update_time AS updateTime,
+            store_company_introduction.content
+        FROM
+            store_company
+        LEFT JOIN store_company_introduction ON store_company.id = store_company_introduction.company_id
+        WHERE  1 = 1 AND store_company.is_deleted = 0
+        <if test="companyName != null and companyName != ''">
+            AND store_company.company_name LIKE CONCAT('%', #{companyName}, '%')
+        </if>
+        ORDER BY store_company.id DESC
+    </select>
+    <!--LIMIT 0, 10-->
+
+    <update id="updateDeleteFlag" parameterType="java.util.Map">
+        UPDATE store_company
+            SET
+             is_deleted = #{isDeleted}
+            WHERE
+                id = #{id}
+    </update>
+
+    <select id="getList" resultType="java.util.Map">
+        select * from store_company
+    </select>
+    <select id="getCompanyByName" resultType="java.util.Map" parameterType="string">
+        select * from store_company
+        where
+        store_company.company_name LIKE CONCAT('%',#{_parameter}, '%')
+    </select>
+
+</mapper>

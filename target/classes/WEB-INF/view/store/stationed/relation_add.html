@@ -1,0 +1,48 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet"
+      href="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/dist/css/bootstrap-select.min.css">
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#SelectCon id="userid" name="驻厂人员">
+                    </#SelectCon>
+                <label class="col-sm-3 control-label">企业</label>
+                <select data-live-search="true"  id="companyid" class="selectpicker col-sm-9">
+                </select>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="StationRelationInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="StationRelationInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/stationed/stationRelation_info.js"></script>
+<script src="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/bootstrap-select.js"></script>
+<script>
+    $.get("${ctxPath}/stationed/getStationList" , function(data,status){
+        console.info(data);
+        //data = data.responseContent.data;
+        console.info(data);
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#userid").append("<option value='"+ data[i].id +"'>"+ data[i].name +"</option>");
+        }
+    });
+
+    $.get("${ctxPath}" + "/company/findCompanyList" , function(data,status){
+        console.info(data);
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#companyid").append("<option value='"+ data[i].id +"'>" + data[i].name +"</option>");
+        }
+        $(".selectpicker").selectpicker("refresh");
+    });
+</script>
+@}

@@ -1,0 +1,281 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet" href="${ctxPath}/static/css/uppload/webuploader.css">
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input id="id" name="" type="hidden" value="${item.id}" underline="true"/>
+                    <#input id="companyName" readonly="readonly" name="企业名称" value="${company.companyName}" underline="true"/>
+                    <#input id="companyId" name="" type="hidden" value="${item.companyId}" underline="true"/>
+                </div>
+
+                <div class="col-sm-6">
+                    <#input id="status" name="" type="hidden" value="${item.status}" underline="true"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">企业介绍内容</label>
+                        <div class="col-sm-11">
+                            <div id="editor" class="editorHeight">
+                                <!--${item.content}-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div id="uploader" class="form-group col-md-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>公司图片</label>
+                                <input id="logoURL" type="text" name="logoURL" value="${ctxPath}/static/img/logo.png" class="hidden">
+                                <input id="companyImg" class="hidden" value="#"><!--class="hidden"-->
+                                <div id="info" class="uploader-list"></div>
+                            </div>
+                            <div id="picker" class="col-md-6 " id="logolist" title="点击上传公司图片" height="100" width="100">
+                                <div id="">
+                                    <img id="companyImgShow" src="${company.image}" title="点击上传公司图片" height="100" width="100">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div id="uploadercontentImg" class="form-group col-md-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>简介图片</label>
+                                <input id="contentImgURL" type="text" name="logoURL" value="/static/img/defaultLogo.png" class="hidden">
+                                <input id="contentImg" class="hidden"  value="#"><!--class="hidden"-->
+                                <div id="info2" class="uploader-list"></div>
+                            </div>
+                            <div id="picker2" class="col-md-6 " id="contentImglist" title="点击上传简介图片" height="100" width="100">
+                                <div>
+                                    <img id="contentImgShow" src="${item.contentImg}" title="点击上传简介图片" height="100" width="100">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="CompanyIntroductionInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="CompanyIntroductionInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+<script src="${ctxPath}/static/modular/store/companyIntroduction/companyIntroduction_info.js"></script>
+<script src="${ctxPath}/static/js/common/webuploader.js"></script>
+<script>
+    // 上传公司图片
+    var $info = $('#info');
+    var uploader = WebUploader.create({
+        auto: true,
+        swf: '${ctxPath}/static/js/common/dist/Uploader.swf:4',
+        server: '${ctxPath}/tools/uploadFile?dirName=companyImg',
+        pick: {
+            id: '#picker',
+            multiple: false
+        },
+        fileNumLimit: 1,
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            mimeTypes: 'image/gif,image/jpg,image/jpeg,image/bmp,image/png'
+        }
+    });
+
+    uploader.on('fileQueued', function(file) {
+        $("#logoImg").parent("div").attr({
+            id: file.id
+        });
+
+        var $img = $("#companyImgShow");
+        // 创建缩略图
+        uploader.makeThumb(file, function(error, src) {
+            if (error) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+            $img.attr('src', src);
+        }, 100, 100); //100x100为缩略图尺寸
+    });
+
+    /**
+     * 验证文件格式、数量以及文件大小
+     */
+    uploader.on("error", function(type) {
+        if (type == "Q_TYPE_DENIED") {
+            alert("请上传图片格式文件");
+        } else if (type == "F_EXCEED_SIZE") {
+            alert("文件大小不能超过8M");
+        } else if (type == "Q_EXCEED_NUM_LIMIT") {
+            alert("只能上传一个图片");
+        }
+    });
+
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on('uploadProgress', function(file, percentage) {
+        var $li = $('#' + file.id),
+            $percent = $li.find('.progress .progress-bar');
+
+        // 避免重复创建
+        if (!$percent.length) {
+            $percent = $('<div class="progress progress-striped active">' +
+                '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+                '</div>' +
+                '</div>').appendTo($li).find('.progress-bar');
+        }
+
+        $info.find('p.state').text('上传中');
+
+        $percent.css('width', percentage * 100 + '%');
+    });
+
+    // 文件上传成功
+    uploader.on('uploadSuccess', function(file) {
+        /*$info.find('p.state').text('已上传').css({
+          color: 'green'
+        });*/
+    });
+
+    //文件上传是否成功的状态
+    //根据服务器返回的数据判断文件是否上传成功
+    //这个函数会接收来自服务器的文件上传是否成功的状态，这个事件发生在‘uploadError’之前
+    //data为服务器返回的数据，是个对象
+    uploader.on("uploadAccept", function(file, data) {
+        if(data.code == "200") {
+            $("#companyImg").val(data.responseContent.path);
+        } else {
+            return false; // 通过return false来告诉组件，此文件上传有错。
+        }
+        $("#picker").attr({
+            title: '点击更换图片'
+        });
+    });
+    // 文件上传失败，显示上传出错
+    uploader.on('uploadError', function(file) {
+        var $img_info = $('<span class="info pull-left">' + file.name + '<p class="state"></p>' + '</span>');
+        $info.append($img_info);
+        $info.find('p.state').text('上传出错').css({
+            color: 'red'
+        });
+        //如果上传失败，logo显示为默认logo
+        $("#logoImg").attr('src', "${ctxPath}/static/img/logo.png");
+        $("#logoURL").val("${ctxPath}/static/img/logo.png");
+        //2秒之后提示信息消失
+        setTimeout(function() {
+            $img_info.remove();
+        }, 2000);
+    });
+
+    // 完成上传
+    uploader.on('uploadComplete', function(file) {
+        layer.alert("图片上传完成");
+        $('#' + file.id).find('.progress').fadeOut();
+        uploader.reset();
+    });
+</script>
+
+<script>
+    // 上传简介图片
+    var $info = $('#info2');
+    var uploader2 = WebUploader.create({
+        auto: true,
+        swf: '${ctxPath}/static/js/common/dist/Uploader.swf:4',
+        server: '${ctxPath}/tools/uploadFile?dirName=companyImg',
+        pick: {
+            id: '#picker2',
+            multiple: false
+        },
+        fileNumLimit: 1,
+        accept: {
+            title: 'Images',
+            extensions: 'gif,jpg,jpeg,bmp,png',
+            //此处一定要写得详细，如果使用'image/*'，chrome浏览器会出现打开资源管理器特别慢的bug！！！！！
+            mimeTypes: 'image/gif,image/jpg,image/jpeg,image/bmp,image/png'
+        }
+    });
+
+    uploader2.on('fileQueued', function(file) {
+        $("#contentImgURL").parent("div").attr({
+            id: file.id
+        });
+
+        var $img = $("#contentImgShow");
+        uploader2.makeThumb(file, function(error, src) {
+            if (error) {
+                $img.replaceWith('<span>不能预览</span>');
+                return;
+            }
+            $img.attr('src', src);
+        }, 100, 100); //100x100为缩略图尺寸
+    });
+
+    uploader2.on("error", function(type) {
+        if (type == "Q_TYPE_DENIED") {
+            alert("请上传图片格式文件");
+        } else if (type == "F_EXCEED_SIZE") {
+            alert("文件大小不能超过8M");
+        } else if (type == "Q_EXCEED_NUM_LIMIT") {
+            alert("只能上传一个图片");
+        }
+    });
+
+    uploader2.on('uploadProgress', function(file, percentage) {
+        var $li = $('#' + file.id),
+            $percent = $li.find('.progress .progress-bar');
+        // 避免重复创建
+        if (!$percent.length) {
+            $percent = $('<div class="progress progress-striped active">' +
+                '<div class="progress-bar" role="progressbar" style="width: 0%">' +
+                '</div>' +
+                '</div>').appendTo($li).find('.progress-bar');
+        }
+        $percent.css('width', percentage * 100 + '%');
+    });
+
+    uploader2.on("uploadAccept", function(file, data) {
+        if(data.code == "200") {
+            $("#contentImg").val(data.responseContent.path);
+        } else {
+            return false;
+        }
+        $("#picker2").attr({
+            title: '点击更换图片'
+        });
+    });
+    uploader2.on('uploadError', function(file) {
+        var $img_info = $('<span class="info pull-left">' + file.name + '<p class="state"></p>' + '</span>');
+        $info.append($img_info);
+        $info.find('p.state').text('上传出错').css({
+            color: 'red'
+        });
+
+        $("#contentImgURL").val("/static/img/defaultLogo.png");
+        setTimeout(function() {
+            $img_info.remove();
+        }, 2000);
+    });
+    uploader2.on('uploadComplete', function(file) {
+        $('#' + file.id).find('.progress').fadeOut();
+        layer.alert("图片上传成功");
+        uploader2.reset();
+    });
+</script>
+@}

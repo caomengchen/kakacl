@@ -1,0 +1,50 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/plugin/fontIconPicker-master/css/jquery.fonticonpicker.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/plugin/fontIconPicker-master/themes/grey-theme/jquery.fonticonpicker.grey.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/plugin/fontIconPicker-master/themes/dark-grey-theme/jquery.fonticonpicker.darkgrey.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/plugin/fontIconPicker-master/themes/bootstrap-theme/jquery.fonticonpicker.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/plugin/fontIconPicker-master/themes/inverted-theme/jquery.fonticonpicker.inverted.min.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/plugin/fontIconPicker-master/demo/fontello-7275ca86/css/fontello.css" />
+<link rel="stylesheet" type="text/css" href="${ctxPath}/static/plugin/fontIconPicker-master/demo/icomoon/style.css" />
+<div class="container-fluid" style="padding: 0 !important;">
+	<!--${noticeList}-->
+	<div class="row">
+		<div class="col-sm-12">
+			@for(notice in noticeList){
+				<div class="alert alert-success alert-dismissable">
+					<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+					<i id="contType" data-fip-value="${notice.cont_type}" data-icomoon="${notice.contTypeHex}"></i>&nbsp;
+					<a target=" _blank" href="${ctxPath}/notice/detail?noticeId=${notice.id}">${notice.title}</a>&nbsp;
+					<label class="pull-right">${notice.createtime}</label>
+				</div>
+			@}
+		</div>
+	</div>
+</div>
+<div class="footer">
+	<div class="pull-right">
+		<span id="startTime"></span> - <span id="endTime"></span> ${authorize.name} <span id="storeNo"></span>
+	</div>
+</div>
+<script>
+	var startTime = '${authorize.startTime}';
+    var endTime = '${authorize.endTime}';
+    console.info(startTime);
+    console.info(typeof(startTime));
+    if(startTime != null && endTime != null && startTime != '' && endTime != '') {
+        var storeNo = '${authorize.storeNo}';
+        $("#storeNo").html('编号:' + storeNo);
+        laydate.render({
+            elem: '#startTime'
+            ,format: 'yyyy-MM-dd'
+            ,value: new Date(startTime)
+        });
+        laydate.render({
+            elem: '#endTime'
+            ,format: 'yyyy-MM-dd'
+            ,value: new Date(endTime)
+        });
+	}
+
+</script>
+@}

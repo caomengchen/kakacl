@@ -1,0 +1,42 @@
+@layout("/common/_container.html"){
+<style>
+    pre{
+        white-space:pre-wrap;
+        word-wrap:break-word;
+    }
+</style>
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input id="id" name="" type="hidden" value="${item.id}" underline="true"/>
+                    <#input id="companyId" type="hidden" name="" value="${item.companyId}" underline="true"/>
+                    <#input id="companyName" readonly="readonly" name="" value="${company.companyName}" underline="true"/>
+                    <img style="max-height: 800px" class="col-sm-12 b-r" src="${company.image}" onerror="javascript:this.src='${ctxPath}/static/img/404.png'" underline="true"/>
+                </div>
+                <div class="col-sm-12 b-r">
+                    <label underline="true" class="col-sm-12 b-r">
+                        <h1>
+                            企业介绍
+                        </h1>
+                    </label>
+                    <img style="max-height: 800px" class="col-sm-6 b-r" src="${item.contentImg}" onerror="javascript:this.src='${ctxPath}/static/img/404.png'" underline="true"/>
+                    <pre class="col-sm-6 b-r">
+                        ${item.content}
+                    </pre>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="danger" name="返回" id="cancel" icon="fa-eraser" clickFun="CompanyIntroductionInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/companyIntroduction/companyIntroduction_detail.js"></script>
+@}

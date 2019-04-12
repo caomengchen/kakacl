@@ -1,0 +1,93 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input id="id"  name="编号" value="${item.id}" underline="true" readonly="readonly"/>
+                    <#input id="nickname" name="姓名" value="${item.nickname}" underline="true" readonly="readonly"/>
+                    <#input id="companyname" name="公司名称" value="${item.companyname}" underline="true" readonly="readonly"/>
+                    <#SelectCon id="workStatus" name="员工状态" underline="true">
+                    </#SelectCon>
+                    <#input id="rFee" name="返費" underline="true" value="${item.returnFee}" type="text" />
+
+                    <#input id="bankname" name="开户行" underline="true" value="${item.bankname}" type="text" />
+                    <#input id="bankcard" name="银行卡号" underline="true" value="${item.bankcard}" type="text" />
+                    <#input id="dReason" name="扣款原因" underline="true" value="${item.dReason}" type="text" />
+                    <#input id="remark" name="备注" underline="true" value="${item.remark}" type="text" />
+
+                    <#input id="iDate" name="面试时间" underline="true" value="${item.iDate}" type="text" />
+                    <#input id="rDate" name="入职时间" underline="true" value="${item.iDate}" type="text" />
+                    <#input id="lDate" name="离职时间" underline="true" value="${item.iDate}" type="text" />
+                    <#input id="rfDate" name="返費时间" underline="true" value="${item.rfDate}" type="text" />
+
+                    <#SelectCon id="lReason" name="离职原因" underline="true">
+                    </#SelectCon>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="StationedInfoDlg.editAcountSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="StationedInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/stationed/stationed_info.js"></script>
+
+<script>
+    $.get("${ctxPath}" + "/tools/findWorkStatus" , function(data,status){
+        console.info(data);
+        data = data.responseContent.data;
+        console.info(data);
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#workStatus").append("<option value='"+ data[i].id +"'>"+ data[i].name +"</option>");
+        }
+    });
+
+    $.get("${ctxPath}" + "/tools/findLeaveReason" , function(data,status){
+        data = data.responseContent.data;
+        $("#workStatus").append("<option value=''>全部</option>");
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#lReason").append("<option value='"+ data[i].id +"'>"+ data[i].name +"</option>");
+        }
+    });
+
+
+    laydate.render({
+        elem: '#iDate'
+        ,type: 'datetime'
+    });
+    laydate.render({
+        elem: '#rDate'
+        ,type: 'datetime'
+    });
+    laydate.render({
+        elem: '#lDate'
+        ,type: 'datetime'
+    });
+    laydate.render({
+        elem: '#rfDate'
+        ,type: 'datetime'
+    });
+
+    $("#lReason").hide();
+    $('#workStatus').change(function(){
+        var p1=$(this).children('option:selected').val();//这就是selected的值
+        if(p1==52110){
+            $("#lReason").show();
+        }
+        else{
+            $("#lReason").hide();
+        }
+    })
+
+
+
+
+</script>
+@}

@@ -1,0 +1,101 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet"
+      href="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/dist/css/bootstrap-select.min.css">
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="WorkStatusForm">
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <label class="col-sm-3 control-label">考勤组</label>
+                    <select data-live-search="true"  id="gid" onchange="staffselectchenge(this)" class="selectpicker col-sm-9">
+                    </select>
+                    <label class="col-sm-3 control-label">选择人员</label>
+                    <select data-live-search="true" id="uid" class="selectpicker col-sm-9">
+                    </select>
+                    <#input id="bTime1" name="首次上班时间" value="" underline="true"/>
+                    <#input id="eTime1" name="首次下班时间" value="" underline="true"/>
+                    <#input id="bTime2" name="二次上班时间" underline="true" type="text"/>
+                    <#input id="eTime2" name="二次下班时间" value="" underline="true"/>
+                    <#input id="bTime3" name="加班起始时间" underline="true" type="text"/>
+                    <#input id="eTime3" name="加班结束时间" underline="true" type="text"/>
+                    <#input id="hrsLocked" name="缺勤时间" underline="true" type="text"/>
+                    <#input id="hrsAddtion" name="加班时间" underline="true" type="text"/>
+                    <#input id="hrsNormal" name="正常工时" underline="true" type="text"/>
+                    <#input id="remarks" name="备注" underline="true" type="text"/>
+                    <#input id="createTime" name="创建时间" underline="true" type="text"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="WorkStatusInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="WorkStatusInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="${ctxPath}/static/modular/store/workStatus/workStatus_info.js"></script>
+<script src="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/bootstrap-select.js"></script>
+<script src="${ctxPath}/static/js/plugins/layer/laydate/laydate.js"></script>
+<script>
+
+    laydate.render({
+        elem: '#createTime'
+        ,type: 'datetime'
+    });
+    laydate.render({
+        elem: '#bTime1',
+        type:"datetime"
+    });
+    laydate.render({
+        elem: '#eTime1',
+        type:"datetime"
+    });
+    laydate.render({
+        elem: '#bTime2',
+        type:"datetime"
+    });
+    laydate.render({
+        elem: '#eTime2',
+        type:"datetime"
+    });
+    laydate.render({
+        elem: '#bTime3',
+        type:"datetime"
+    });
+    laydate.render({
+        elem: '#eTime3',
+        type:"datetime"
+    });
+
+    //查询该猪场下所有企业的考勤组信息
+    $.get("${ctxPath}" + "/workStatus/findWorkCheckList" , function(data,status){
+        console.info(data);
+        $("#uid").empty();
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#gid").append("<option value='"+ data[i].id +"'>" + data[i].name +"</option>");
+        }
+        $("#uid").append("<option value='"+ '10000' +"'>" + "请选择"+"</option>");
+        $(".selectpicker").selectpicker("refresh");
+    });
+
+
+    $("#uid").append("<option value='"+ '10000' +"'>" + "请选择"+"</option>");
+    function staffselectchenge(paramobj) {
+        $("#uid").empty();
+        //获取考勤组id
+        var obj = document.getElementById('gid');
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+        $("#uid").append("<option value='"+ '10000' +"'>" + "请选择"+"</option>");
+        $.get("${ctxPath}" + "/workStatus/getStaffList/" + value, function(data,status){
+            for(var i = 0 ; i < data.length; i ++) {
+                $("#uid").append("<option value='"+ data[i].id +"'>" +  data[i].nickName +"</option>");
+            }
+            $(".selectpicker").selectpicker("refresh");
+        });
+    }
+</script>
+@}

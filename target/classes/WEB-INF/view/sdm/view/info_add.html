@@ -1,0 +1,50 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input id="user_name" name="姓&nbsp;名" underline="true"/>
+                    <#input id="work_num" name="工号" underline="true"/>
+                    <#input id="id_card" name="身份证号码" underline="true"/>
+                    <#input id="phone_num" name="手机号" underline="true"/>
+                    <#input id="entry_time" name="入职时间" underline="true"/>
+                    <#input id="income_date" name="入场时间" underline="true"/>
+                    <#select id="gender" name="性别" underline="true">
+                        <option value="1">男</option>
+                        <option value="0">女</option>
+                    </#select>
+                    <#select id="work_status" name="工作状态" underline="true">
+                        <option value="52100">在(入)职中</option>
+                        <option value="52101">待入职</option>
+                        <option value="52109">待报道</option>
+                        <option value="52110">离职</option>
+                    </#select>
+                    <#input id="line" name="线别" underline="true"/>
+                    <#input id="group_name" name="组别" underline="true"/>
+                    <#input id="birthplace" name="籍贯" underline="true"/>
+                    <#input id="remark" name="备注" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="保存" id="ensure" icon="fa-check" clickFun="SuggestInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SuggestInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/companystaff/sdm/sdm_info.js"></script>
+<script>
+    laydate.render({
+        elem: '#entry_time'
+    });
+    laydate.render({
+        elem: '#income_date'
+    });
+</script>
+@}

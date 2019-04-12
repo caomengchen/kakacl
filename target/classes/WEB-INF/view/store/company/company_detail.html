@@ -1,0 +1,59 @@
+@layout("/common/_container.html"){
+<style>
+    pre{
+        white-space:pre-wrap;
+        word-wrap:break-word;
+    }
+</style>
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input id="companyName1" readonly="readonly" name="" value="${item.image}" underline="true"/>
+                    <#input id="companyName" readonly="readonly" name="" value="${item.companyName}" underline="true"/>
+                    <img style="max-height: 800px" class="col-sm-12 b-r" src="${item.image}" onerror="javascript:this.src='${ctxPath}/static/img/404.png'" underline="true"/>
+                </div>
+                <div class="col-sm-12 b-r">
+                    <label underline="true" class="col-sm-12 b-r">
+                        <h1>
+                            企业介绍
+                        </h1>
+                    </label>
+                    <img style="max-height: 800px" class="col-sm-6 b-r" src="${companyIntroduction.contentImg}" onerror="javascript:this.src='${ctxPath}/static/img/404.png'" underline="true"/>
+                    <pre class="col-sm-6 b-r">
+                        ${companyIntroduction.content}
+                    </pre>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="closewin()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/companyIntroduction/companyIntroduction_detail.js"></script>
+<script>
+    function closewin(){
+        layer.confirm('确认要关闭本窗口吗？', {
+            btn : [ '确定', '取消' ]
+        }, function(index) {
+            layer.close(index);
+            var index = layer.load(0,{shade: [0.7, '#393D49']}, {shadeClose: true}); //0代表加载的风格，支持0-2
+            if (navigator.userAgent.indexOf("Firefox") != -1 || navigator.userAgent.indexOf("Chrome") !=-1) {
+                window.location.href="about:blank";
+                window.close();
+            } else {
+                window.opener = null;
+                window.open("", "_self");
+                window.close();
+            }
+        });
+    }
+</script>
+@}

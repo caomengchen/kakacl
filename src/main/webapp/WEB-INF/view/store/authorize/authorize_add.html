@@ -1,0 +1,43 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input id="name" name="门店名称" value="园区一店" underline="true"/>
+                    <#SelectCon id="sysUserId" name="店长">
+                    </#SelectCon>
+                    <#input id="areaName" name="区域名称" value="江苏加盟店" underline="true"/>
+                    <#input id="storeNo" name="门店编号" value="001" underline="true"/>
+                    <#input id="startTime" type="text" name="授权开始时间"/>
+                    <#input id="endTime" type="text" name="授权截止时间" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AuthorizeInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AuthorizeInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/authorize/authorize_info.js"></script>
+<script>
+    $.get("${ctxPath}/mgr/storeManagerList" , function(data,status){
+        data = data.responseContent.data;
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#sysUserId").append("<option value='"+ data[i].id +"'>"+ data[i].nickname +"</option>");
+        }
+    });
+    laydate.render({
+        elem: '#startTime'
+    });
+    laydate.render({
+        elem: '#endTime'
+    });
+</script>
+@}

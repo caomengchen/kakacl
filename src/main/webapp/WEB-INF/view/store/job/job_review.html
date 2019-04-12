@@ -1,0 +1,25 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="jobJoinForm">
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <input type="hidden" id="id" name="职位编号" value="${item.id}" underline="true"/>
+                    <input type="hidden" id="positionId" name="工作类型编号" value="${item.positionId}" underline="true"/>
+                    <#input disabled="true" id="allowanceCycleView" name="补贴周期" value="${jd.allowanceCycle}" underline="true"/>
+                    <#input disabled="true" id="allowanceCycleView" name="考勤方式" value="${jd.unitView}" underline="true"/>
+                    <#input disabled="true" id="allowancePriceView" name="补贴价格(元)" value="${jd.allowancePrice}" underline="true"/>
+                </div>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="通过" id="ensure" icon="fa-check" clickFun="JobInfoDlg.reviewPass()"/>
+                    <#button btnCss="info" name="驳回" id="ensure" icon="fa-check" clickFun="JobInfoDlg.reviewReject()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JobInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/job/job_review.js"></script>
+@}

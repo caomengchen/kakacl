@@ -1,0 +1,5 @@
+2019-01-11 17:15:38.615 ERROR 10596 --- [http-nio-8081-exec-6] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-01-11 17:16:16.385 ERROR 10596 --- [http-nio-8081-exec-4] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-01-11 17:17:00.060 ERROR 10596 --- [http-nio-8081-exec-9] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-01-11 17:17:43.305 ERROR 10596 --- [http-nio-8081-exec-6] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-01-11 17:18:00.125 ERROR 10596 --- [http-nio-8081-exec-9] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif

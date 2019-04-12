@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.SettlementMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.Settlement">
+        <id column="id" property="id" />
+        <result column="type" property="type" />
+        <result column="no" property="no" />
+        <result column="sys_user_id" property="sysUserId" />
+        <result column="store_account_id" property="storeAccountId" />
+        <result column="billing_cycle" property="billingCycle" />
+        <result column="bill_price" property="billPrice" />
+        <result column="bill_cycle" property="billCycle" />
+        <result column="create_time" property="createTime" />
+        <result column="remakes" property="remakes" />
+        <result column="del_flag" property="delFlag" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </resultMap>
+
+    <resultMap id="view_Settlement" type="cn.stylefeng.guns.modular.store.vo.SettlementVo">
+        <result column="id" property="id" />
+        <result column="account_id" property="accountId" />
+        <result column="create_time" property="createtime" />
+        <result column="update_time" property="updateTime" />
+        <result column="work_status" property="workStatus" />
+        <result column="billing_cycle" property="billingCycle" />
+        <result column="bill_price" property="billPrice" />
+        <result column="bill_cycle" property="billCycle" />
+        <result column="sys_user_id" property="sysUserId" />
+        <result column="create_by" property="createBy" />
+        <result column="update_by" property="updateBy" />
+        <result column="company_name" property="companyName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, type, no, sys_user_id, store_account_id, billing_cycle, bill_price, bill_cycle, create_time, update_time, update_by, remakes, del_flag
+    </sql>
+
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			store_settlement
+		WHERE
+			1 = 1
+		<if test="jobId != null and jobId != ''">
+			AND job_id = #{jobId}
+		</if>
+	</select>
+
+    <!--店长获取结算人员列表信息-->
+    <select id="getSettlementPersonViewList" resultMap="view_Settlement">
+        SELECT
+            SS.id,
+            SA.id AS account_id,
+			SAID.`name`,
+			SA.create_time,
+			SA.work_status,
+			SS.billing_cycle,
+			SS.bill_price,
+            SS.bill_cycle,
+            SS.sys_user_id,
+            SS.update_time,
+            SS.create_by,
+            SC.company_name
+		FROM
+			store_account SA
+		JOIN store_account_id_card SAID ON SAID.account_id = SA.id
+		JOIN store_settlement SS ON SS.store_account_id = SA.id
+        JOIN store_clerk_join SCJ ON SCJ.store_clerk_id = SS.sys_user_id
+        JOIN store_job SJ ON SJ.id = SS.job_id
+        JOIN store_company SC ON SC.id = SJ.company_id
+		WHERE
+			1 = 1
+        <if test="storeId != null and storeId != ''">
+            AND SCJ.store_id = #{storeId}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND SAID.name LIKE CONCAT('%', #{userName}, '%')
+        </if>
+        <if test="clerkId != null and clerkId != ''">
+            AND SS.sys_user_id = #{clerkId}
+        </if>
+        <if test="workStatus != null and workStatus != ''">
+            AND SA.work_status = #{workStatus}
+        </if>
+        <if test="billingCycle != null and billingCycle != ''">
+            AND SS.bill_cycle = #{billingCycle}
+        </if>
+        <if test="units != null and units != ''">
+            AND SS.billing_cycle = #{units}
+        </if>
+
+		AND SS.del_flag = 0
+    </select>
+
+</mapper>

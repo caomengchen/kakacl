@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.JobMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.Job">
+        <id column="id" property="id" />
+        <result column="position_id" property="positionId" />
+        <result column="company_id" property="companyId" />
+        <result column="industry_id" property="industryId" />
+        <result column="station_id" property="stationId" />
+        <result column="wages_type" property="wagesType" />
+        <result column="wages_top" property="wagesTop" />
+        <result column="wages_base" property="wagesBase" />
+        <result column="age_top" property="ageTop" />
+        <result column="age_base" property="ageBase" />
+        <result column="agent_return" property="agentReturn" />
+        <result column="agent_cycle" property="agentCycle" />
+        <result column="employee_return" property="employeeReturn" />
+        <result column="employee_cycle" property="employeeCycle" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="area" property="area" />
+        <result column="address" property="address" />
+        <result column="attract" property="attract" />
+        <result column="apply_count" property="applyCount" />
+        <result column="pageviews" property="pageviews" />
+        <result column="collections" property="collections" />
+        <result column="sort" property="sort" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+    
+    <!-- 职位表返回的表对象映射 -->
+    <resultMap type="cn.stylefeng.guns.modular.store.model.Job" id="job">
+		<id property="id" column="id"/>
+		<result property="jobId" column="job_id"/>
+		<result property="hiringPost" column="hiring_post"/>
+		<result property="companyImg" column="company_img"/>
+		<result property="employeeCycle" column="employee_cycle"/>
+		<result property="numberPeople" column="number_people"/>
+		<result property="billingCycle" column="billing_cycle"/>
+		<result property="allowanceCycle" column="allowance_cycle"/>
+		<result property="allowancePrice" column="allowance_price"/>
+		<result property="unit" column="unit"/>
+		<result property="status" column="status"/>
+		<result property="endTime" column="end_time"/>
+		<result property="condition" column="condition"/>
+		<result property="welfare" column="welfare"/>
+		<result property="createDate" column="create_date"/>
+	</resultMap>
+	
+	<!-- 界面上的数据对象 -->
+	<resultMap type="cn.stylefeng.guns.modular.store.vo.Job" id="view_job">
+		<id property="id" column="id"/>
+		<result property="companyName" column="companyName"/>
+		<result property="companyId" column="companyId"/>
+		<result property="areaName" column="areaName"/>
+		<result property="jobType" column="jobType"/>
+		<result property="peopreNum" column="peopreNum"/>
+		<result property="employeeCycle" column="employee_cycle"/>
+		<result property="billingCycle" column="billing_cycle"/>
+		<result property="allowancePrice" column="allowance_price"/>
+		<result property="allowanceCycle" column="allowance_cycle"/>
+		<result property="unit" column="unit"/>
+		<result property="status" column="status"/>
+		<result property="endTime" column="end_time"/>
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, position_id, company_id, industry_id, station_id, wages_type, wages_top, wages_base, age_top, age_base, agent_return, agent_cycle, employee_return, employee_cycle, province, city, area, address, attract, apply_count, pageviews, collections, sort, is_deleted, create_time, update_time
+    </sql>
+
+	<select id="findJobStoreList" resultMap="job">
+		select 
+			<include refid="Base_Column_List" />
+		from store_job where 1 = 1 
+		<if test="company_id != null and company_id != ''">
+			and company_id = #{company_id}
+		</if>
+	</select>
+	
+	<!-- 根据条件查询职位，展示层 -->
+	<select id="getJobStoreViewList" resultMap="view_job" parameterType="map">
+		SELECT
+			J.id AS id,
+			C.company_name AS companyName,
+			C.id AS companyId,
+			B.NAME AS areaName,
+			P.NAME AS jobType,
+			JD.number_people AS peopreNum,
+			JD.end_time AS end_time,
+			JD.employee_cycle AS employee_cycle,
+			JD.billing_cycle AS billing_cycle,
+			JD.allowance_price AS allowance_price,
+			JD.allowance_cycle AS allowance_cycle,
+			JD.unit AS unit,
+			JD.STATUS AS status
+		FROM
+			store_job J
+		JOIN store_company C ON J.company_id = C.id
+		JOIN store_position P ON J.position_id = P.id
+		JOIN store_job_detail JD ON J.id = JD.job_id
+		JOIN store_base_region B ON B.id = C.area
+		WHERE
+			1 = 1
+		AND J.is_deleted = 0
+		<if test="companyName != null and companyName != ''">
+			AND C.company_name LIKE CONCAT('%', #{companyName}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			AND JD.status = #{status}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			<![CDATA[ AND JD.end_time BETWEEN #{startTime} AND #{endTime}  ]]>
+		</if>
+		ORDER BY J.id DESC
+	</select>
+	<!-- AND JD.end_time BETWEEN '2018-12-02' AND '2018-12-31'  <![CDATA[ AND JD.end_time >  #{endTime}  ]]>-->
+</mapper>

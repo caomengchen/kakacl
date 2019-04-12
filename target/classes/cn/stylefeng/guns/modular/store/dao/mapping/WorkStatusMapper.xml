@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.WorkStatusMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.WorkStatus">
+        <id column="id" property="id" />
+        <result column="uid" property="uid" />
+        <result column="gid" property="gid" />
+        <result column="remarks" property="remarks" />
+        <result column="expstate" property="expstate" />
+        <result column="begin1_Time" property="bTime1" />
+        <result column="end1_Time" property="eTime1" />
+        <result column="begin2_Time" property="bTime2" />
+        <result column="end2_Time" property="eTime2" />
+        <result column="begin3_Time" property="bTime3" />
+        <result column="end3_Time" property="eTime3" />
+        <result column="hrs_lacked" property="gid" />
+        <result column="hrs_addtion" property="gid" />
+        <result column="hrs_normal" property="gid" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+
+</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, uid, gid,remarks, expstate, begin1_Time, end1_Time,begin2_Time, end2_Time,begin3_Time, end3_Time,hrs_lacked,hrs_addtion,hrs_normal,create_time,update_time
+    </sql>
+
+    <select id="getList" parameterType="java.util.Map" resultType="java.util.Map">
+           SELECT e.nickname,b.title,b.extType,b.id,b.name,b.first_STime,b.first_ETime,b.second_STime,b.second_ETime,b.ext_begin,b.ext_end,
+           c.company_name as companyName,d.`name` as workName,a.id,
+           a.begin1_Time as bTime1,a.end1_Time as eTime1,a.begin2_Time as bTime2,a.end2_Time as eTime2,
+           a.begin3_Time as bTime3,a.end3_Time as eTime3,a.hrs_lacked as hrsLacked,a.hrs_addtion as hrsAddtion,
+           a.hrs_normal as hrsNormal,a.create_time as createTime
+            from store_workStatus as a
+            JOIN store_workCheck as b
+            ON a.gid=b.id
+            JOIN store_company as c
+            on b.cid=c.id
+            JOIN store_position as d
+            ON b.pid = d.id
+            JOIN store_account as e
+            on a.uid=e.id
+            WHERE c.id IN (select companyid from stationedUser_company where userid=#{userid})
+            <if test="companyName != null and companyName != ''">
+                and  c.company_name LIKE CONCAT('%',#{companyName},'%')
+            </if>
+            <if test="workName != null and workName != ''">
+                and  d.name LIKE CONCAT('%',#{workName},'%')
+            </if>
+            <if test="nickName != null and nickName != ''">
+                and  e.nickname LIKE CONCAT('%',#{nickName},'%')
+            </if>
+            <if test="hrsAddtion != null and hrsAddtion != ''">
+                and a.hrs_addtion =#{hrsAddtion}
+            </if>
+            <if test="hrsNormal != null and hrsNormal != ''">
+                and a.hrs_normal =#{hrsNormal}
+            </if>
+            <if test="extType != null and extType != ''">
+                and b.extType =#{extType}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and a.create_time <![CDATA[ >= ]]> #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and a.create_time <![CDATA[ <= ]]> #{endTime}
+            </if>
+            order by a.create_time
+    </select>
+
+
+
+    <select id="findWorkCheckList" parameterType="java.lang.Integer" resultType="java.util.Map">
+     select a.id,a.name,a.cid,a.pid
+     from store_workCheck as a
+     where a.cid IN(select companyid from stationedUser_company as b where b.userid=#{userid} )
+    </select>
+
+
+    <!--查询驻场人员可以选择的某个公司的岗位-->
+    <select id="getPositionList" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select
+            a.id ,
+            a.name
+            from
+            store_position as a
+            where
+             a.is_deleted = 0
+             and a.id IN (SELECT pid from store_workCheck where cid=#{companyid})
+    </select>
+
+
+    <!--查询某个公司某个岗位下面的所有员工-->
+    <select id="getStaffList" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT id,nickname as nickName from store_account WHERE company_id=#{cid} and position_id=#{pid}
+    </select>
+
+    <!--查询每个员工的工资表，默认查询上个月的工资条-->
+    <!--<select id="getWorkAttendance" parameterType="java.util.Map" resultType="java.util.Map">-->
+    <!--select sum(hrs_lacked) as hrsLacked,sum(hrs_addtion) as hrsAddtion,sum(hrs_normal) as hrsNormal,a.uid,-->
+    <!--b.id as bid,b.name as bName,b.title,c.nickname as nickName,c.job_num,d.company_name as companyName,e.`name` as pNmae-->
+    <!--from store_workStatus as a-->
+    <!--JOIN store_workCheck as b-->
+    <!--ON a.gid=b.id-->
+    <!--JOIN store_account as c-->
+    <!--ON a.uid=c.id-->
+    <!--JOIN store_company as d-->
+    <!--ON d.id =b.cid-->
+    <!--JOIN store_position as e-->
+    <!--ON b.pid =e.id-->
+    <!--WHERE d.id IN (select companyid from stationedUser_company where userid=#{userid})-->
+        <!--<if test="jobNum != null and jobNum != ''">-->
+            <!--and  c.job_num=#{jobNum}-->
+        <!--</if>-->
+        <!--<if test="pName != null and pName != ''">-->
+            <!--and  e.name=#{pName}-->
+        <!--</if>-->
+        <!--<if test="nickName != null and nickName != ''">-->
+            <!--and  e.nickname LIKE CONCAT('%',#{nickName},'%')-->
+        <!--</if>-->
+        <!--<if test="companyName != null and companyName != ''">-->
+            <!--and  d.company_name LIKE CONCAT('%',#{companyName},'%')-->
+        <!--</if>-->
+        <!--<if test="startTime != null and startTime != ''">-->
+            <!--and a.create_time <![CDATA[ >= ]]> #{startTime}-->
+        <!--</if>-->
+        <!--<if test="endTime != null and endTime != ''">-->
+            <!--and a.create_time <![CDATA[ <= ]]> #{endTime}-->
+        <!--</if>-->
+        <!--GROUP BY a.uid-->
+        <!--order by sum(hrs_normal) DESC-->
+    <!--</select>-->
+
+    <select id="getWorkAttendance" parameterType="java.util.Map" resultType="java.util.Map">
+         select sum(hrs_lacked) as hrsLacked,sum(hrs_addtion) as hrsAddtion,sum(hrs_normal) as hrsNormal,a.uid,a.gid
+          from store_workStatus as a
+          JOIN store_workCheck as b
+          ON a.gid=b.id
+          JOIN store_company as d
+          ON d.id =b.cid
+          WHERE d.id IN (select companyid from stationedUser_company where userid=#{userid})
+        <if test="startTime != null and startTime != ''">
+            and a.begin1_Time <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and a.begin1_Time <![CDATA[ <= ]]> #{endTime}
+        </if>
+        GROUP BY a.uid,a.gid
+        order by sum(hrs_normal) DESC
+    </select>
+
+</mapper>

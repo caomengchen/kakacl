@@ -1,0 +1,43 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" underline="true"/>
+                            <#input id="name" name="公司名称" underline="true"/>
+                            <#input id="industryId" name="企业行业" underline="true"/>
+                            <#input id="type" name="企业类型" underline="true"/>
+                            <#input id="countBase" name="企业人数范围下限" underline="true"/>
+                            <#input id="countTop" name="企业人数范围上限" underline="true"/>
+                            <#input id="contactName" name="联系人名称" underline="true"/>
+                            <#input id="contactPhone" name="联系电话" underline="true"/>
+                            <#input id="province" name="省"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="city" name="城市" underline="true"/>
+                            <#input id="area" name="区域" underline="true"/>
+                            <#input id="address" name="详细地址" underline="true"/>
+                            <#input id="image" name="企业介绍图" underline="true"/>
+                            <#input id="info" name="公司信息" underline="true"/>
+                            <#input id="sort" name="排序" underline="true"/>
+                            <#input id="isDeleted" name="" underline="true"/>
+                            <#input id="createTime" name="" underline="true"/>
+                            <#input id="updateTime" name="" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="CompanyInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="CompanyInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/company/company_info.js"></script>
+@}

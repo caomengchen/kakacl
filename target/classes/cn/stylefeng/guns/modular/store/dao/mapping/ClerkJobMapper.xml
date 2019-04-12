@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.ClerkJobMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.ClerkJob">
+        <id column="id" property="id" />
+        <result column="store_id" property="storeId" />
+        <result column="job_id" property="jobId" />
+        <result column="billing_cycle" property="billingCycle" />
+        <result column="bill_price" property="billPrice" />
+        <result column="bill_cycle" property="billCycle" />
+        <result column="del_flag" property="delFlag" />
+        <result column="create_time" property="createTime" />
+        <result column="create_by" property="createBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_by" property="updateBy" />
+    </resultMap>
+    
+    <!-- 界面上的数据对象 -->
+	<resultMap type="cn.stylefeng.guns.modular.store.vo.Job" id="view_clerkJob">
+		<id property="id" column="id"/>
+		<id property="clerkjobIdView" column="clerkjobIdView"/>
+		<result property="companyName" column="companyName"/>
+		<result property="companyId" column="companyId"/>
+		<result property="areaName" column="areaName"/>
+		<result property="jobType" column="jobType"/>
+		<result property="peopreNum" column="peopreNum"/>
+		<result property="employeeCycle" column="employee_cycle"/>
+		<result property="billingCycle" column="billing_cycle"/>
+		<result property="allowancePrice" column="allowance_price"/>
+		<result property="allowanceCycle" column="allowance_cycle"/>
+		<result property="unit" column="unit"/>
+		<result column="clerk_is_reset" property="clerkIsReset" />
+		<result property="status" column="status"/>
+		<result property="endTime" column="end_time"/>
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, store_id, job_id, billing_cycle, bill_price, bill_cycle, del_flag, create_time, create_by, update_time, update_by, clerk_is_reset
+    </sql>
+
+	<!-- 根据条件查询职位，展示层 -->
+	<select id="getClerkJobViewList" resultMap="view_clerkJob" parameterType="map">
+		SELECT DISTINCT clerkjobIdView, id, companyName, companyId, areaName, jobType, peopreNum, end_time, employee_cycle, billing_cycle, allowance_price, allowance_cycle, unit, STATUS FROM (
+		SELECT
+			J.id AS id,
+			CJ.id AS clerkjobIdView,
+			C.company_name AS companyName,
+			C.id AS companyId,
+			B. NAME AS areaName,
+			P. NAME AS jobType,
+			JD.number_people AS peopreNum,
+			JD.end_time AS end_time,
+			JD.employee_cycle AS employee_cycle,
+			JD.billing_cycle AS billing_cycle,
+			CJ.bill_price AS allowance_price,
+			CJ.bill_cycle AS allowance_cycle,
+			CJ.billing_cycle AS unit,
+			JD. STATUS AS STATUS
+		FROM
+			store_job J
+		JOIN store_company C ON J.company_id = C.id
+		JOIN store_position P ON J.position_id = P.id
+		JOIN store_job_detail JD ON J.id = JD.job_id
+		JOIN store_base_region B ON B.id = C.area
+		JOIN store_clerk_job CJ ON J.id = CJ.job_id
+		JOIN store_clerk_join CJoin ON CJoin.store_id = CJ.store_id
+		WHERE
+			1 = 1
+		AND J.is_deleted = 0 AND CJ.del_flag = 0
+		<if test="companyName != null and companyName != ''">
+			AND C.name LIKE CONCAT('%', #{companyName}, '%')
+		</if>
+		<if test="storeClerkId != null and storeClerkId != ''">
+			AND CJoin.store_clerk_id = #{storeClerkId}
+		</if>
+		<if test="storeId != null and storeId != ''">
+			AND CJ.store_id = #{storeId}
+		</if>
+
+		<if test="endTime != null and endTime != ''">
+			<![CDATA[ AND JD.end_time >  #{endTime}  ]]>
+		</if>
+		ORDER BY CJ.create_time DESC) AS tab
+	</select>
+
+</mapper>

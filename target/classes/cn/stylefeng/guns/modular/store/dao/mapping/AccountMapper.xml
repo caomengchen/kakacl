@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.AccountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.Account">
+        <id column="id" property="id" />
+        <result column="role" property="role" />
+        <result column="avatar" property="avatar" />
+        <result column="nickname" property="nickname" />
+        <result column="sex" property="sex" />
+        <result column="age" property="age" />
+        <result column="phone" property="phone" />
+        <result column="job_num" property="jobNum" />
+        <result column="email" property="email" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="area" property="area" />
+        <result column="address" property="address" />
+        <result column="password" property="password" />
+        <result column="status" property="status" />
+        <result column="work_status" property="workStatus" />
+        <result column="company_id" property="companyId" />
+        <result column="position_id" property="positionId" />
+        <result column="points" property="points" />
+        <result column="service_id" property="serviceId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="report_data" property="rDate" />
+        <result column="leave_data" property="lDate" />
+        <result column="leave_reason" property="lReason" />
+        <result column="deduction_reason" property="dReason" />
+        <result column="interview_data" property="iDate" />
+        <result column="sourceid" property="sourceid" />
+        <result column="inputterid" property="inputterid" />
+        <result column="returnFee" property="returnFee" />
+        <result column="returnFee_time" property="returnFeeTime" />
+        <result column="workType" property="workType" />
+        <result column="read_time" property="readTime" />
+        <result column="agent_name" property="agentName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, role, avatar, nickname, sex, age, phone, job_num, email, province, city, area, address, password, status, work_status, company_id, position_id, points, service_id, create_time, update_time,
+        report_date,leave_date,leave_reason,deduction_reason,interview_date,sourceid,inputterid,returnFee,returnFee_time,workType,read_time,agent_name
+    </sql>
+
+    <select id="getstaffList" resultType="java.util.Map" parameterType="java.util.Map">
+     SELECT * from (SELECT * from store_account
+     WHERE company_id in(
+     SELECT companyid FROM stationedUser_company where userid=#{id})) as m
+     JOIN store_company as s
+     ON m.company_id=s.id
+     JOIN store_agent as a
+     ON a.id=m.sourceid
+     JOIN store_account_bank b
+     ON m.id =b.account_id
+     JOIN store_account_id_card f
+     ON m.id =f.account_id
+     where
+     1=1
+      <if test="nickname != null and nickname !=''">
+          and m.nickname like CONCAT('%', #{nickname}, '%')
+      </if>
+      <if test="companyname != null and companyname !=''">
+          and s.company_name like  CONCAT('%', #{companyname}, '%')
+      </if>
+      <if test="sourcename != null and sourcename != ''">
+          and a.name like CONCAT('%', #{sourcename}, '%')
+      </if>
+      <if test="workStatus != null and workStatus != ''">
+          and m.work_status = #{workStatus}
+      </if>
+      <if test="startTime != null and startTime != ''">
+          and m.report_date <![CDATA[ >= ]]> #{startTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+          and m.report_date <![CDATA[ <= ]]> #{endTime}
+      </if>
+    </select>
+
+
+    <select id="getallstaffList" resultType="java.util.Map" parameterType="java.util.Map">
+      SELECT * FROM store_account as a
+      JOIN store_company as s
+      ON a.company_id = s.id
+      JOIN store_agent as b
+      ON b.id=a.sourceid
+      JOIN store_account_bank c
+      ON a.id =c.account_id
+      JOIN store_account_id_card f
+      ON a.id =f.account_id
+      where
+      1=1
+      <if test="nickname != null and nickname !=''">
+            and a.nickname like CONCAT('%', #{nickname}, '%')
+      </if>
+      <if test="companyname != null and companyname !=''">
+            and s.company_name like  CONCAT('%', #{companyname}, '%')
+      </if>
+      <if test="sourcename != null and sourcename != ''">
+            and b.name like CONCAT('%', #{sourcename}, '%')
+      </if>
+      <if test="workStatus != null and workStatus != ''">
+            and a.work_status = #{workStatus}
+      </if>
+      <if test="startTime != null and startTime != ''">
+            and a.report_date <![CDATA[ >= ]]> #{startTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+            and a.report_date <![CDATA[ <= ]]> #{endTime}
+      </if>
+    </select>
+
+
+    <update id="updateAccount" parameterType="java.util.Map">
+        update store_account
+        <set>
+        <if test="workStatus != null and workStatus != ''">
+            work_status = #{workStatus},
+        </if>
+        <if test="iDate != null and iDate != ''">
+            interview_date = #{iDate},
+        </if>
+        <if test="rDate != null and rDate != ''">
+            report_date = #{rDate},
+        </if>
+        <if test="lDate != null and lDate != ''">
+            leave_date = #{lDate},
+        </if>
+        <if test="lReason != null and lReason != ''">
+            leave_reason = #{lReason},
+        </if>
+        <if test="dReason != null and dReason != ''">
+            deduction_reason = #{dReason},
+        </if>
+        <if test="remark != null and remark != ''">
+            remark = #{remark},
+        </if>
+        <if test="rFeee != null and rFeee != ''">
+            returnFee = #{rFeee},
+        </if>
+        <if test="rfDate != null and rfDate != ''">
+            returnFee_time = #{rfDate},
+        </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
+    <insert id="insertAccount" parameterType="cn.stylefeng.guns.modular.store.model.Account">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            select LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO store_account(
+        nickname,
+        sex,
+        phone,
+        job_num,
+        company_id,
+        sourceid,
+        agent_name,
+        returnFee,
+        interview_date,
+        report_date,
+        leave_date,
+        read_time,
+        returnFee_time,
+        leave_reason,
+        deduction_reason,
+        remark,
+        workType
+        )values (
+        #{nickname},
+        #{sex},
+        #{phone},
+        #{jobNum},
+        #{companyId},
+        #{sourceid},
+        #{agentName},
+        #{returnFee},
+        #{iDate},
+        #{rDate},
+        #{lDate},
+        #{readTime},
+        #{returnFeeTime},
+        #{lReason},
+        #{dReason},
+        #{remark},
+        #{workType}
+        )
+    </insert>
+
+</mapper>

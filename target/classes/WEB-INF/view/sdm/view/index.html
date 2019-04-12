@@ -1,0 +1,79 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>住电装</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="work_num" name="工号" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="start_create_time" name="开始时间" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="end_create_time" name="结束时间" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="Suggest.search()"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="添加" icon="fa-search" clickFun="Suggest.openAddSuggest()"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="详细信息" icon="fa-search" clickFun="Suggest.openDetailInfo()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="SuggestTableToolbar" role="group">
+                            @if(shiro.hasPermission("/suggest/add")){
+                            <#button name="添加" icon="fa-plus" clickFun="Suggest.openAddSuggest()"/>
+                            @}
+                            @if(shiro.hasPermission("/suggest/update")){
+                            <#button name="修改" icon="fa-edit" clickFun="Suggest.openSuggestDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/sdm/index/delete")){
+                            <#button name="删除" icon="fa-remove" clickFun="Suggest.delete()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/suggest/export")){
+                            <#button name="信息导出" icon="fa-check-circle"  space="true" id = "export"/>
+                            @}
+                        </div>
+                        <#table id="SuggestTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/companystaff/sdm/sdm.js"></script>
+<script src="${ctxPath}/static/js/tableExport/jquery.base64.js"></script>
+<script src="${ctxPath}/static/js/tableExport/jquery.table2excel.js"></script>
+<script src="${ctxPath}/static/js/tableExport/tableExport.js"></script>
+<script>
+    $("#export").click(function(){
+        $("#SuggestTable").table2excel({
+            exclude: ".noExl",
+            name: "信息表",
+            filename: "信息表数据" //do not include extension
+        });
+    });
+    laydate.render({
+        elem: '#start_create_time'
+        ,isInitValue: true
+        ,min: -60
+        ,max: 0
+        ,value: new Date(new Date().getTime() - 24*60*60*1000)
+    });
+    laydate.render({
+        elem: '#end_create_time'
+        ,isInitValue: true
+        ,min: -30
+        ,max: 1
+        ,value: new Date()
+    });
+</script>
+@}

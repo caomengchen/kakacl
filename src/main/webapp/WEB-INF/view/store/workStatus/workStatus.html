@@ -1,0 +1,130 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet"
+      href="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/dist/css/bootstrap-select.min.css">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>招聘信息管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                             <#NameCon id="companyName" name="企业名称" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="nickName" name="员工姓名" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="hrsNormal" name="正常工时" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#SelectCon id="extType" name="加班类型">
+                                <option value="0">普通加班</option>
+                                <option value="1">双休加班</option>
+                                <option value="2">节假日加班</option>
+                            </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="startTime" name="开始日期" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="endTime" name="结束日期" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="WorkStatus.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="WorkStatusTableToolbar" role="group">
+                            <#button name="模板下载" icon="fa fa-cloud-download" aria-hidden="true" clickFun="WorkStatus.download()"/>
+                            <input style="display: inline-flex;" class="btn btn-primary button-margin" type="file" id="file" space="true" name="fileupload" />
+                            <#button name="信息导入" icon="fa-check-circle"  space="true" id = "xhrSubmit"/>
+                            <#button name="信息导出" icon="fa-check-circle"  space="true" id = "export"/>
+                            <#button name="修改" icon="fa-edit"  clickFun="WorkStatus.edit()"/>
+                            <#button name="添加" icon="fa-plus" clickFun="WorkStatus.openAddWorkStatus()"/>
+                            <#button name="删除" icon="fa-remove" clickFun="WorkStatus.delete()" space="true"/>
+                            <#button name="查看工资条" icon="fa-search" clickFun="WorkStatus.toWorkingHour()"/>
+                        </div>
+                        <#table id="WorkStatusTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/workStatus/workStatus.js"></script>
+<script src="${ctxPath}/static/modular/store/subsidy/subsidy.js"></script>
+<script src="${ctxPath}/static/js/tableExport/jquery.base64.js"></script>
+<script src="${ctxPath}/static/js/tableExport/jquery.table2excel.js"></script>
+<script src="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/bootstrap-select.js"></script>
+<script src="${ctxPath}/static/js/tableExport/tableExport.js"></script>
+<script>
+
+    laydate.render({
+        elem: '#startTime',
+        type:"datetime"
+    });
+
+    laydate.render({
+        elem: '#endTime',
+        type:"datetime"
+    });
+
+    $("#export").click(function(){
+        $("#WorkStatusTable").table2excel({
+            // exclude CSS class
+            exclude: ".noExl",
+            name: "职位表",
+            filename: "职位表数据" //do not include extension
+        });
+    });
+
+
+    $("#xhrSubmit").click(function(){
+        layer.confirm('您确认提交表格数据，导入所有职位吗？', {
+            btn : [ '确定', '取消' ]
+        }, function(index) {
+            layer.close(index);
+            xhrSubmit();
+        });
+    });
+
+
+
+    function xhrSubmit() {
+        var file_obj = document.getElementById('file').files[0];
+        if(file_obj == null || file_obj == undefined || file_obj == '' || typeof (file_obj) == undefined || typeof (file_obj) == "undefined") {
+            layer.alert("请选择文件上传，谢谢");
+            return;
+        }
+        var filename = file_obj.name.toLowerCase();
+        var fix = filename.split(".")[1];
+        if(fix != "xls" && fix != "xlsx"){
+            layer.alert("请上传xls或xlsx格式文件，谢谢！");
+            return;
+        }
+
+
+        var fd = new FormData();
+        fd.append('uploadFile',file_obj);
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', '${ctxPath}/stationed/readExcel2', true);
+        xhr.send(fd);
+        xhr.onreadystatechange = function () {
+            //后端接受完毕
+            if(xhr.readyState == 4){
+                var obj = JSON.parse(xhr.responseText);
+                if(obj.code == "200") {
+                    layer.alert("提交成功");
+                } else if (obj.code == "500"){
+                    layer.alert("服务异常！");
+                } else {
+                    layer.alert("服务异常！" + obj.message);
+                }
+            }
+        };
+    }
+</script>
+@}

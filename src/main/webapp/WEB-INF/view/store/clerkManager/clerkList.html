@@ -1,0 +1,41 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>店员管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="name" name="名称" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="phone" name="手机号码" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="account" name="账户" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="ClerkManager.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="ClerkManagerTableToolbar" role="group">
+                            @if(shiro.hasPermission("/clerkManager/freeze")){
+                                <#button name="冻结" icon="fa fa-lock" clickFun="ClerkManager.freeze()"/>
+                            @}
+                            @if(shiro.hasPermission("/clerkManager/unfreeze")){
+                            <#button name="解冻" icon="fa fa-unlock" clickFun="ClerkManager.unfreeze()"/>
+                            @}
+                        </div>
+                        <#table id="ClerkManagerTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/clerkManager/clerkManager.js"></script>
+@}

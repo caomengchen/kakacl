@@ -1,0 +1,6 @@
+2019-03-02 10:24:46.927 ERROR 5432 --- [http-nio-8081-exec-10] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-03-02 10:24:51.329 ERROR 5432 --- [http-nio-8081-exec-10] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-03-02 10:25:08.187 ERROR 5432 --- [http-nio-8081-exec-3] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-03-02 10:25:44.654 ERROR 5432 --- [http-nio-8081-exec-5] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-03-02 11:06:36.407 ERROR 5432 --- [http-nio-8081-exec-7] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-03-02 11:06:38.422 ERROR 5432 --- [http-nio-8081-exec-4] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif

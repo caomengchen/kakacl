@@ -1,0 +1,4 @@
+2019-01-15 16:03:22.868 ERROR 6956 --- [http-nio-8081-exec-10] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-01-15 16:03:29.725 ERROR 6956 --- [http-nio-8081-exec-10] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-01-15 16:04:56.818 ERROR 7192 --- [http-nio-8081-exec-5] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif
+2019-01-15 16:10:13.380 ERROR 13432 --- [http-nio-8081-exec-7] cn.stylefeng.roses.core.util.FileUtil    : 文件未找到！/usr/local/fileData\girl.gif

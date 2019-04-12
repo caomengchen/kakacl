@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.StationedMapper">
+
+    <select id="getList" resultType="java.util.Map" parameterType="string">
+     select M.id,M.userid,M.companyid,C.company_name AS companyname,U.name
+     <choose>
+         <when test="_parameter != null and _parameter != ''">
+             from(select * from stationedUser_company as b
+             WHERE b.userid in
+             (SELECT id FROM sys_user as k
+             WHERE k.name  LIKE CONCAT('%',#{_parameter},'%'))) as M
+         </when>
+         <otherwise>
+             from stationedUser_company as M
+         </otherwise>
+     </choose>
+     left join store_company as C
+     on C.id=M.companyid
+     left join sys_user as U
+     on U.id=M.userid
+    </select>
+
+    <insert id="insertRelation" parameterType="java.util.Map">
+     insert into stationedUser_company(
+     userid,
+     companyid
+     )values (
+     #{userid},
+     #{companyid}
+     )
+    </insert>
+
+
+    <delete id="deleteRelation" parameterType="java.lang.Integer">
+        delete  from stationedUser_company where id=#{id}
+    </delete>
+
+    <!--插入身份证信息-->
+    <insert id="insertAccountIdCard" parameterType="java.util.Map">
+   insert into store_account_id_card(
+   account_id,
+   name,
+   gender,
+   sai_org,
+   birthday,
+   nation,
+   card_no,
+   card_address,
+   start_deadline,
+   end_deadline
+   )values (
+   #{accountid},
+   #{name},
+   #{gender},
+   #{organization},
+   #{birthday},
+   #{nation},
+   #{cardNo},
+   #{address},
+   #{startTime},
+   #{endTime}
+   )
+    </insert>
+</mapper>

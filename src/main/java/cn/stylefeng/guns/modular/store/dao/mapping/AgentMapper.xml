@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.store.dao.AgentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.store.model.Agent">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="status" property="status" />
+        <result column="userid" property="userid" />
+        <result column="username" property="username" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, status,userid, username, create_time, update_time
+    </sql>
+    <select id="getList" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+         from store_agent as A
+         where userid=#{userid}
+        <if test="name != null and name != ''">
+            and  A.name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="id != null and id != ''">
+            and  A.id =#{id}
+        </if>
+    </select>
+
+    <select id="getAgnet" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from store_agent as A
+        where  A.name = #{_parameter}
+
+    </select>
+
+
+
+    <insert id="insertAgent" parameterType="java.util.Map">
+      insert into store_agent (
+      name,
+      status,
+      create_time,
+      userid,
+      username
+      )
+      values
+      (
+      #{name},
+      #{status},
+      #{createTime},
+      #{userid},
+      #{username}
+      )
+    </insert>
+
+    <update id="updateAgent" parameterType="java.util.Map">
+        update store_agent
+        <set>
+        <if test="name !=null and name !=''">
+            name=#{name},
+        </if>
+        <if test="status !=null and status !=''">
+            status=#{status},
+        </if>
+        </set>
+        where
+        id=#{id}
+    </update>
+
+    <update id="deleteAgent" parameterType="java.util.Map">
+        update store_agent
+        set
+        status=#{status}
+        where
+        id=#{id}
+    </update>
+
+    <delete id="deleteAgent1" parameterType="Integer" >
+        delete  from store_agent where id =#{id}
+    </delete>
+
+
+
+
+
+
+</mapper>

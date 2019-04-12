@@ -1,0 +1,44 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" underline="true"/>
+                            <#input id="type" name="补贴类型：1就业补贴" underline="true"/>
+                            <#input id="no" name="补贴编号" underline="true"/>
+                            <#input id="partyA" name="甲方主键-门店" underline="true"/>
+                            <#input id="partyBIdCardId" name="就业者-乙方身份证主键" underline="true"/>
+                            <#input id="partBBackCard" name="乙方银行卡号码" underline="true"/>
+                            <#input id="partyBPhoneNum" name="乙方手机号码" underline="true"/>
+                            <#input id="companyId" name="上班公司主键" underline="true"/>
+                            <#input id="workType" name="工种" underline="true"/>
+                            <#input id="startWarkDate" name="开始工作日期,按录入为准"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="endWarkDate" name="最后结算时间" underline="true"/>
+                            <#input id="workPeriod" name="工作类型,结算模式，这里为小时，日，周，月等" underline="true"/>
+                            <#input id="employeeCycle" name="发薪模式,结算方式，默认为1，底薪加班" underline="true"/>
+                            <#input id="billingCycle" name="补贴方式,结算周期 默认为定期返" underline="true"/>
+                            <#input id="subsidyPrice" name="补贴价格(金额)" underline="true"/>
+                            <#input id="period" name="要求期限" underline="true"/>
+                            <#input id="createTime" name="" underline="true"/>
+                            <#input id="remakes" name="" underline="true"/>
+                            <#input id="delFlag" name="删除标记：0，未删除；1，删除" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SubsidyInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SubsidyInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/subsidy/subsidy_info.js"></script>
+@}

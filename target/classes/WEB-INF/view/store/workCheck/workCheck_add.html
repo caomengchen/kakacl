@@ -1,0 +1,111 @@
+@layout("/common/_container.html"){
+<link rel="stylesheet"
+      href="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/dist/css/bootstrap-select.min.css">
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="WorkCheckForm">
+
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                     <#input id="name" name="考勤组名称" value="" underline="true" />
+                    <label class="col-sm-3 control-label">企业</label>
+                    <select data-live-search="true"  id="cid" onchange="companyselectchenge(this)" class="selectpicker col-sm-9">
+                    </select>
+                    <label class="col-sm-3 control-label">选择岗位</label>
+                    <select data-live-search="true"  id="pid" class="selectpicker col-sm-9">
+                    </select>
+                    <#input id="workname" name="岗位名称" value="" underline="true" readonly="readonly"/>
+                    <#input id="title" name="班次名称" value="" underline="true"/>
+                    <#SelectCon id="extType" name="加班类型">
+                    <option value="100">请选择</option>
+                    <option value="0">普通加班</option>
+                    <option value="1">双休加班</option>
+                    <option value="2">节假日加班</option>
+                    </#SelectCon>
+                    <#input id="fSTime" name="首次上班时间" value="" underline="true"/>
+                    <#input id="fETime" name="首次下班时间" value="" underline="true"/>
+                    <#input id="sSTime" name="二次上班时间" underline="true" type="text"/>
+                    <#input id="sETime" name="二次下班时间" value="" underline="true"/>
+                    <#input id="ebegin" name="加班起始时间" underline="true" type="text"/>
+                    <#input id="eend" name="加班结束时间" underline="true" type="text"/>
+                    <#input id="createTime" name="创建时间" underline="true" type="text"/>
+
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="WorkCheckInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="WorkCheckInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="${ctxPath}/static/modular/store/workCheck/workCheck_info.js"></script>
+<script src="${ctxPath}/static/css/plugins/bootstrap/bootstrap-select-1.13.2/bootstrap-select.js"></script>
+<script src="${ctxPath}/static/js/plugins/layer/laydate/laydate.js"></script>
+<script>
+
+    laydate.render({
+        elem: '#createTime'
+        ,type: 'datetime'
+    });
+    laydate.render({
+        elem: '#fSTime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#fETime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#sSTime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#sETime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#ebegin',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#eend',
+        type:"time"
+    });
+
+    $.get("${ctxPath}" + "/workCheck/findCompanyList" , function(data,status){
+        console.info(data);
+        for(var i = 0 ; i < data.length; i ++) {
+            $("#cid").append("<option value='"+ data[i].id +"'>" + data[i].company_name +"</option>");
+        }
+        $(".selectpicker").selectpicker("refresh");
+    });
+
+    function companyselectchenge(paramobj) {
+        $("#pid").empty();
+        $("#workname").val("")
+        var obj = document.getElementById('cid');
+        var index = obj.selectedIndex;
+        var value = obj.options[index].value;
+        $.get("${ctxPath}" + "/workCheck/getPositionList/" + value , function(data,status){
+            for(var i = 0 ; i < data.length; i ++) {
+                $("#pid").append("<option value='"+ data[i].id +"'>" +  data[i].name +"</option>");
+            }
+            var p = $('#pid option:selected').text();
+            $("#workname").val(p);
+            $(".selectpicker").selectpicker("refresh");
+        });
+    }
+
+    $('#pid').change(function(){
+        $("#workname").val("")
+        var p1=$(this).children('option:selected').val();//这就是selected的值
+        var p2= $(this).children('option:selected').text();//这就是selected中option文本的值
+        $("#workname").val(p2);
+    })
+
+</script>
+@}

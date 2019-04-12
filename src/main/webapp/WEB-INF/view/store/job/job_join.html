@@ -1,0 +1,49 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="jobJoinForm">
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <i>设置给店员查看的数据</i>
+                    <div class="hr-line-dashed"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <input type="hidden" id="id" name="职位编号" value="${item.id}" underline="true"/>
+                    <input type="hidden" id="positionId" name="工作类型编号" value="${item.positionId}" underline="true"/>
+                    <#input disabled="true" id="allowanceCycleView" name="补贴周期" value="${jd.allowanceCycle}" underline="true"/>
+                    <#input disabled="true" id="allowanceCycleView" name="考勤方式" value="${jd.unitView}" underline="true"/>
+                    <#input disabled="true" id="allowancePriceView" name="补贴价格(元)" value="${jd.allowancePrice}" underline="true"/>
+                </div>
+
+                <div class="col-sm-6 b-r">
+                    <#input id="billCycle" name="结算周期" placeholder="例:22" value="" underline="true" />
+                    <#SelectCon id="billingCycle" name="考勤方式">
+                        <option selected="selected" value="50601">考勤日</option>
+                        <option value="50602">工时</option>
+                        <option value="50603">工作日</option>
+                        <option value="50604">自然日</option>
+                    </#SelectCon>
+                    <div class="hr-line-dashed"></div>
+                    @if(selfStore == 1){
+                        <#SelectCon id="clerkIsReset" name="是否支持店员修改价格">
+                            <option selected="selected" value="0">否</option>
+                            <option value="1">是</option>
+                        </#SelectCon>
+                        <div class="hr-line-dashed"></div>
+                    @}
+                    <#input id="billPrice" name="结算价格(元)" placeholder="例:200" value="" underline="true" />
+                </div>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="确认接单" id="ensure" icon="fa-check" clickFun="JobInfoDlg.editJoin()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="JobInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/job/job_join.js"></script>
+@}

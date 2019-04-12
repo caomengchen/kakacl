@@ -1,0 +1,33 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="主键id" value="${item.id}" underline="true"/>
+                            <#input id="storeId" name="门店主键-店长主键" value="${item.storeId}" underline="true"/>
+                            <#input id="storeClerkId" name="店员主键" value="${item.storeClerkId}" underline="true"/>
+                            <#input id="delFlag" name="删除标记" value="${item.delFlag}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="createTime" name="创建时间" value="${item.createTime}" underline="true"/>
+                            <#input id="createBy" name="创建者" value="${item.createBy}" underline="true"/>
+                            <#input id="updateTime" name="更新时间" value="${item.updateTime}" underline="true"/>
+                            <#input id="updateBy" name="更新者" value="${item.updateBy}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ClerkJoinInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ClerkJoinInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/clerkJoin/clerkJoin_info.js"></script>
+@}

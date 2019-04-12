@@ -1,0 +1,35 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                        <#input disabled="true" id="id" name="主键" value="${item.id}" underline="true"/>
+                        <#input disabled="true" id="title" name="标题" value="${item.title}" underline="true"/>
+                        <#input disabled="true" id="content" name="内容" value="${item.content}" underline="true"/>
+                </div>
+
+                <div class="col-sm-6">
+                    <#input id="remakes" name="备注" value="${item.remakes}" underline="true"/>
+                    <#SelectCon id="status" name="状态">
+                        <option value="${item.status}">${item.status}</option>
+                        <option value="已收到">已收到</option>
+                        <option value="处理中">处理中</option>
+                        <option value="已处理">已处理</option>
+                    </#SelectCon>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SuggestInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SuggestInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/suggest/suggest_info.js"></script>
+@}

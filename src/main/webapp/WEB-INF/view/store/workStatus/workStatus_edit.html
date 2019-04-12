@@ -1,0 +1,64 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input readonly="readonly" id="id" name="编号" value="${workStatus.id}" underline="true"/>
+                    <#input  id="bTime1" name="首次上班时间" value="${workStatus.bTime1}" underline="true"/>
+                    <#input  id="eTime1" name="首次下班时间" value="${workStatus.eTime1}" underline="true"/>
+                    <#input  id="bTime2" name="二次上班时间" value="${workStatus.bTime2}" underline="true"/>
+                    <#input  id="eTime2" name="二次下班时间" value="${workStatus.eTime2}" underline="true"/>
+                    <#input  id="bTime3" name="加班开始时间" value="${workStatus.bTime3}" underline="true"/>
+                    <#input  id="eTime3" name="加班结束时间" value="${workStatus.eTime3}" underline="true"/>
+                    <#input id="hrsLocked" name="缺勤时间" value="${workStatus.hrsLocked}" underline="true" type="text"/>
+                    <#input id="hrsAddtion" name="加班时间" value="${workStatus.hrsAddtion}" underline="true" type="text"/>
+                    <#input id="hrsNormal" name="正常工时" value="${workStatus.hrsNormal}" underline="true" type="text"/>
+                    <#input id="remarks" name="备注" value="${workStatus.remarks}" underline="true" type="text"/>
+                    <#input  id="updateTime" name="修改时间" value="${workStatus.updateTime}" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="修改" id="ensure" icon="fa-check" clickFun="WorkStatusInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="WorkStatusInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/workStatus/workStatus_info.js"></script>
+<script src="${ctxPath}/static/js/plugins/layer/laydate/laydate.js"></script>
+<script type="application/javascript">
+    laydate.render({
+        elem: '#updateTime'
+        ,type: 'datetime'
+    });
+    laydate.render({
+        elem: '#fSTime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#fETime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#sSTime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#sETime',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#ebegin',
+        type:"time"
+    });
+    laydate.render({
+        elem: '#eend',
+        type:"time"
+    });
+</script>
+@}

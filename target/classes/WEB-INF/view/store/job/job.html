@@ -1,0 +1,131 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>招聘信息管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="condition" name="企业名称" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="end_time" name="截止结束日期" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="Job.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="JobTableToolbar" role="group">
+                            @if(shiro.hasPermission("/job/add")){
+                                <#button name="添加" icon="fa-plus" clickFun="Job.openAddJob()"/>
+                            @}
+                            @if(shiro.hasPermission("/job/review")){
+                                <#button name="职位审核" icon="fa-check" clickFun="Job.openReview()"/>
+                            @}
+                            @if(shiro.hasPermission("/job/update")){
+                                <#button name="职位修改" icon="fa-edit" clickFun="Job.openJobDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/job/store_join_delete")){
+                            <!-- 店长删除自己接的订单 -->
+                            <#button name="接单删除" icon="fa-remove" clickFun="Job.delete()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/job/store_join")){
+                                <#button name="接单" icon="fa-remove" clickFun="Job.join()" space="true"/>
+                            @}
+                            <!-- 职位详情 不可以接单的详情 -->
+                            @if(shiro.hasPermission("/job/detail")){
+                                <#button name="职位详情" icon="fa-remove" clickFun="Job.detail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/job/add")){
+                                <!--<a class="btn btn-primary button-margin" href="${ctxPath}/tools/download?file_name=jobs.xls">模板下载</a>-->
+                            @}
+                            @if(shiro.hasPermission("/job/add")){
+                                <input style="display: inline-flex;" class="btn btn-primary button-margin" type="file" id="file" space="true" name="fileupload" />
+                            @}
+                            @if(shiro.hasPermission("/job/add")){
+                                <#button name="职位导入" icon="fa-check-circle"  space="true" id = "xhrSubmit"/>
+                            @}
+                            @if(shiro.hasPermission("/job/export")){
+                            <#button name="信息导出" icon="fa-check-circle"  space="true" id = "export"/>
+                            @}
+                            @if(shiro.hasPermission("/job/delete")){
+                            <#button name="删除" icon="fa-remove" clickFun="Job.delete()" space="true"/>
+                            @}
+                        </div>
+                        <#table id="JobTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/store/job/job.js"></script>
+<script src="${ctxPath}/static/modular/store/subsidy/subsidy.js"></script>
+<script src="${ctxPath}/static/js/tableExport/jquery.base64.js"></script>
+<script src="${ctxPath}/static/js/tableExport/jquery.table2excel.js"></script>
+<script src="${ctxPath}/static/js/tableExport/tableExport.js"></script>
+<script>
+    laydate.render({
+        elem: '#start_time'
+    });
+
+    laydate.render({
+        elem: '#end_time'
+    });
+
+    $("#export").click(function(){
+        $("#JobTable").table2excel({
+            // exclude CSS class
+            exclude: ".noExl",
+            name: "职位表",
+            filename: "职位表数据" //do not include extension
+        });
+    });
+
+    $("#xhrSubmit").click(function(){
+        layer.confirm('您确认提交表格数据，导入所有职位吗？', {
+            btn : [ '确定', '取消' ]
+        }, function(index) {
+            layer.close(index);
+            xhrSubmit();
+        });
+    });
+
+    function xhrSubmit() {
+        var file_obj = document.getElementById('file').files[0];
+        if(file_obj == null || file_obj == undefined || file_obj == '' || typeof (file_obj) == undefined || typeof (file_obj) == "undefined") {
+            layer.alert("请选择文件上传，谢谢");
+            return;
+        }
+        var filename = file_obj.name.toLowerCase();
+        var fix = filename.split(".")[1];
+        if(fix != "xls" && fix != "xlsx"){
+            layer.alert("请上传xls或xlsx格式文件，谢谢！");
+            return;
+        }
+
+        var fd = new FormData();
+        fd.append('uploadFile',file_obj);
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', '${ctxPath}/job/readExcel2', true);
+        xhr.send(fd);
+        xhr.onreadystatechange = function () {
+            //后端接受完毕
+            if(xhr.readyState == 4){
+                var obj = JSON.parse(xhr.responseText);
+                if(obj.code == "200") {
+                    layer.alert("提交成功");
+                } else if (obj.code == "500"){
+                    layer.alert("服务异常！");
+                } else {
+                    layer.alert("服务异常！" + obj.message);
+                }
+            }
+        };
+    }
+</script>
+@}
